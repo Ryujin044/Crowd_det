@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CrowdSense — Monitoring System</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #080c10;
+    --bg2: #0d1318;
+    --bg3: #111920;
+    --panel: #0f1a22;
+    --border: #1e3040;
+    --border2: #254055;
+    --accent: #00d4ff;
+    --accent2: #00ff9d;
+    --accent3: #ff6b35;
+    --warn: #ffcc00;
+    --danger: #ff3b5c;
+    --text: #c8dde8;
+    --text2: #6a8fa5;
+    --text3: #3a6070;
+    --white: #f0f8ff;
+    --glow: 0 0 20px rgba(0,212,255,0.3);
+    --glow2: 0 0 20px rgba(0,255,157,0.25);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden;}
+
+  /* ── SCANLINE OVERLAY ── */
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);
+  }
+
+  /* ═══════════════════════════════ LOGIN PAGE ═══════════════════════════════ */
+  #login-page{
+    display:flex;align-items:center;justify-content:center;min-height:100vh;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, #0a1f2e 0%, #080c10 70%);
+    position:relative;overflow:hidden;
+  }
+  #login-page::after{
+    content:'';position:absolute;inset:0;
+    background: conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(0,212,255,0.03) 60deg, transparent 120deg);
+    animation: spinbg 20s linear infinite;
+  }
+  @keyframes spinbg{to{transform:rotate(360deg);}}
+
+  .grid-bg{
+    position:absolute;inset:0;
+    background-image: linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at center, black 0%, transparent 70%);
+  }
+
+  .login-box{
+    position:relative;z-index:2;
+    width:420px;padding:48px 44px;
+    background:var(--panel);
+    border:1px solid var(--border2);
+    box-shadow: 0 0 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(0,212,255,0.1), var(--glow);
+    animation: fadein 0.6s ease;
+  }
+  @keyframes fadein{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+
+  .login-logo{
+    display:flex;align-items:center;gap:12px;margin-bottom:8px;
+  }
+  .login-logo-icon{
+    width:40px;height:40px;border:2px solid var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .login-logo-icon::before{
+    content:'';position:absolute;inset:-4px;border:1px solid rgba(0,212,255,0.2);
+  }
+  .login-logo-icon svg{width:22px;height:22px;fill:var(--accent);}
+  .login-brand{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;letter-spacing:3px;color:var(--white);}
+  .login-brand span{color:var(--accent);}
+  .login-sub{font-size:11px;letter-spacing:4px;color:var(--text3);text-transform:uppercase;margin-bottom:36px;margin-left:52px;}
+  .login-title{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--text2);margin-bottom:28px;
+    display:flex;align-items:center;gap:10px;}
+  .login-title::before{content:'';flex:1;height:1px;background:var(--border);}
+  .login-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  .field{margin-bottom:20px;}
+  .field label{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:8px;}
+  .field input{
+    width:100%;padding:12px 14px;
+    background:rgba(0,212,255,0.04);
+    border:1px solid var(--border2);
+    color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;
+    outline:none;transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,212,255,0.1);}
+  .field input::placeholder{color:var(--text3);}
+
+  .login-btn{
+    width:100%;padding:14px;margin-top:8px;
+    background:var(--accent);color:#080c10;
+    font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;
+    letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;
+    transition:background 0.2s, box-shadow 0.2s;
+    position:relative;overflow:hidden;
+  }
+  .login-btn:hover{background:#33ddff;box-shadow:var(--glow);}
+  .login-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transform:translateX(-100%);transition:transform 0.4s;}
+  .login-btn:hover::after{transform:translateX(100%);}
+
+  .login-error{
+    display:none;margin-top:14px;padding:10px 14px;
+    background:rgba(255,59,92,0.1);border-left:3px solid var(--danger);
+    font-size:12px;color:var(--danger);letter-spacing:1px;
+  }
+  .login-hint{margin-top:18px;font-size:11px;color:var(--text3);text-align:center;}
+  .login-hint span{color:var(--text2);}
+
+  /* ═══════════════════════════════ DASHBOARD ═══════════════════════════════ */
+  #dashboard-page{display:none;flex-direction:column;min-height:100vh;}
+
+  /* ── HEADER ── */
+  .header{
+    display:flex;align-items:center;gap:0;
+    background:var(--bg2);border-bottom:1px solid var(--border);
+    padding:0 24px;height:58px;position:sticky;top:0;z-index:100;
+  }
+  .h-logo{display:flex;align-items:center;gap:10px;padding-right:24px;border-right:1px solid var(--border);}
+  .h-logo-icon{width:30px;height:30px;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;}
+  .h-logo-icon svg{width:16px;height:16px;fill:var(--accent);}
+  .h-brand{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:3px;color:var(--white);}
+  .h-brand span{color:var(--accent);}
+
+  .h-nav{display:flex;align-items:stretch;height:100%;margin-left:0;gap:0;}
+  .h-nav a{
+    display:flex;align-items:center;gap:7px;padding:0 18px;
+    font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+    color:var(--text2);text-decoration:none;border-bottom:2px solid transparent;
+    transition:color 0.2s,border-color 0.2s;cursor:pointer;
+  }
+  .h-nav a.active,.h-nav a:hover{color:var(--accent);border-color:var(--accent);}
+  .h-nav a svg{width:13px;height:13px;fill:currentColor;}
+
+  .h-right{margin-left:auto;display:flex;align-items:center;gap:16px;}
+  .h-time{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--accent2);}
+  .h-status{display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:1px;color:var(--text2);}
+  .h-dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse2 2s infinite;}
+  @keyframes pulse2{0%,100%{box-shadow:0 0 0 0 rgba(0,255,157,0.5);}50%{box-shadow:0 0 0 6px rgba(0,255,157,0);}}
+  .h-user{
+    display:flex;align-items:center;gap:8px;padding:6px 12px;
+    border:1px solid var(--border);cursor:pointer;font-size:12px;color:var(--text);
+  }
+  .h-user svg{width:14px;height:14px;fill:var(--text2);}
+  .h-logout{
+    padding:6px 14px;border:1px solid var(--danger);background:transparent;
+    color:var(--danger);font-family:'Barlow Condensed',sans-serif;font-size:11px;
+    font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;
+    transition:background 0.2s;
+  }
+  .h-logout:hover{background:rgba(255,59,92,0.1);}
+
+  /* ── ALERT TICKER ── */
+  .alert-bar{
+    background:rgba(255,204,0,0.08);border-bottom:1px solid rgba(255,204,0,0.2);
+    padding:7px 24px;display:flex;align-items:center;gap:12px;overflow:hidden;
+  }
+  .alert-label{
+    font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;
+    letter-spacing:2px;color:var(--warn);white-space:nowrap;
+    display:flex;align-items:center;gap:6px;
+  }
+  .alert-label svg{width:13px;height:13px;fill:var(--warn);animation:blink 1.2s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .ticker-wrap{flex:1;overflow:hidden;}
+  .ticker{
+    display:inline-flex;gap:60px;white-space:nowrap;
+    animation:ticker 30s linear infinite;
+    font-size:11px;letter-spacing:1px;color:var(--text2);
+  }
+  .ticker span{color:var(--warn);}
+  @keyframes ticker{from{transform:translateX(100vw);}to{transform:translateX(-100%);}}
+
+  /* ── MAIN ── */
+  .main{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:18px;}
+
+  /* ── ZONE SELECTOR ── */
+  .zone-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .zone-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-right:4px;}
+  .zone-btn{
+    padding:6px 14px;border:1px solid var(--border2);background:transparent;
+    font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;
+    letter-spacing:2px;text-transform:uppercase;color:var(--text2);cursor:pointer;
+    transition:all 0.15s;
+  }
+  .zone-btn.active,.zone-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.07);}
+
+  /* ── KPI GRID ── */
+  .kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+  @media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr);}}
+
+  .kpi-card{
+    background:var(--panel);border:1px solid var(--border);
+    padding:16px 18px;position:relative;overflow:hidden;
+    transition:border-color 0.2s;
+  }
+  .kpi-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg, var(--accent), transparent);
+  }
+  .kpi-card.warn::before{background:linear-gradient(90deg, var(--warn), transparent);}
+  .kpi-card.danger::before{background:linear-gradient(90deg, var(--danger), transparent);}
+  .kpi-card.green::before{background:linear-gradient(90deg, var(--accent2), transparent);}
+  .kpi-card:hover{border-color:var(--border2);}
+  .kpi-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .kpi-label svg{width:11px;height:11px;fill:currentColor;}
+  .kpi-val{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:700;line-height:1;color:var(--white);}
+  .kpi-val.big{font-size:34px;}
+  .kpi-unit{font-size:12px;font-weight:400;color:var(--text2);margin-left:3px;}
+  .kpi-change{margin-top:8px;font-size:11px;display:flex;align-items:center;gap:4px;}
+  .kpi-change.up{color:var(--accent2);}
+  .kpi-change.down{color:var(--danger);}
+  .kpi-change.neutral{color:var(--text2);}
+  .kpi-sub{margin-top:6px;font-size:11px;color:var(--text3);}
+
+  /* capacity bar */
+  .cap-bar{margin-top:8px;height:4px;background:var(--border);position:relative;}
+  .cap-fill{height:100%;transition:width 0.5s;position:relative;}
+  .cap-fill::after{content:'';position:absolute;right:0;top:-2px;width:2px;height:8px;background:inherit;}
+
+  /* ── CHARTS ROW ── */
+  .charts-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;}
+  @media(max-width:1200px){.charts-row{grid-template-columns:1fr 1fr;}}
+
+  .chart-card{background:var(--panel);border:1px solid var(--border);padding:18px 20px;}
+  .chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .chart-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--white);}
+  .chart-badge{font-size:10px;padding:3px 8px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);color:var(--accent);letter-spacing:1px;}
+  .chart-badge.live{background:rgba(0,255,157,0.1);border-color:rgba(0,255,157,0.2);color:var(--accent2);}
+  .chart-badge.warn{background:rgba(255,204,0,0.1);border-color:rgba(255,204,0,0.2);color:var(--warn);}
+  .chart-wrap{position:relative;}
+
+  /* ── BOTTOM ROW ── */
+  .bottom-row{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:12px;}
+  @media(max-width:1200px){.bottom-row{grid-template-columns:1fr 1fr;}}
+
+  /* ── ZONE TABLE ── */
+  .table-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead tr{border-bottom:1px solid var(--border2);}
+  thead th{padding:8px 12px;text-align:left;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);font-weight:600;}
+  tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;}
+  tbody tr:hover{background:rgba(0,212,255,0.03);}
+  tbody td{padding:10px 12px;color:var(--text);}
+  .td-zone{font-weight:600;color:var(--white);}
+  .status-pill{
+    display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;border-radius:2px;
+  }
+  .pill-ok{background:rgba(0,255,157,0.12);color:var(--accent2);}
+  .pill-warn{background:rgba(255,204,0,0.12);color:var(--warn);}
+  .pill-crit{background:rgba(255,59,92,0.12);color:var(--danger);}
+  .density-bar{height:6px;background:var(--border);position:relative;min-width:80px;}
+  .density-fill{height:100%;}
+
+  /* ── INCIDENT LOG ── */
+  .incident-list{display:flex;flex-direction:column;gap:0;}
+  .incident{
+    display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);
+    align-items:flex-start;
+  }
+  .incident:last-child{border-bottom:none;}
+  .inc-icon{
+    width:28px;height:28px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;border:1px solid;
+  }
+  .inc-icon svg{width:13px;height:13px;fill:currentColor;}
+  .inc-icon.crit{border-color:var(--danger);color:var(--danger);background:rgba(255,59,92,0.06);}
+  .inc-icon.warn{border-color:var(--warn);color:var(--warn);background:rgba(255,204,0,0.06);}
+  .inc-icon.info{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.06);}
+  .inc-body{flex:1;}
+  .inc-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px;}
+  .inc-meta{font-size:11px;color:var(--text2);}
+  .inc-time{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);white-space:nowrap;}
+
+  /* ── HEATMAP ── */
+  .heatmap-grid{
+    display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(5,1fr);
+    gap:3px;aspect-ratio:8/5;
+  }
+  .hm-cell{
+    border-radius:2px;transition:transform 0.2s;cursor:default;
+    position:relative;
+  }
+  .hm-cell:hover{transform:scale(1.08);z-index:2;}
+  .hm-cell[data-tip]:hover::after{
+    content:attr(data-tip);position:absolute;bottom:110%;left:50%;transform:translateX(-50%);
+    background:var(--bg);border:1px solid var(--border2);padding:4px 8px;
+    font-size:10px;color:var(--white);white-space:nowrap;z-index:10;pointer-events:none;
+  }
+  .hm-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--text3);letter-spacing:1px;}
+
+  /* ── FOOTER ── */
+  .footer{
+    padding:10px 24px;border-top:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:11px;color:var(--text3);
+  }
+  .footer-left{display:flex;align-items:center;gap:20px;}
+  .footer-dot{width:6px;height:6px;border-radius:50%;}
+
+  /* scrollbar */
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--border2);}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ LOGIN PAGE ═══════════════════════════════ -->
+<div id="login-page">
+  <div class="grid-bg"></div>
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      </div>
+      <div class="login-brand">CROWD<span>SENSE</span></div>
+    </div>
+    <div class="login-sub">Intelligent Crowd Monitoring</div>
+    <div class="login-title">Operator Access</div>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Enter username" autocomplete="off"/>
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Authenticate</button>
+    <div class="login-error" id="login-error">⚠ Invalid credentials. Access denied.</div>
+    <div class="login-hint">Default: <span>admin</span> / <span>crowd@2025</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ DASHBOARD PAGE ═══════════════════════════════ -->
+<div id="dashboard-page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="h-logo">
+      <div class="h-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      </div>
+      <div class="h-brand">CROWD<span>SENSE</span></div>
+    </div>
+    <nav class="h-nav" style="margin-left:20px;">
+      <a class="active">
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        Overview
+      </a>
+      <a>
+        <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+        Analytics
+      </a>
+      <a>
+        <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+        Alerts
+      </a>
+      <a>
+        <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="h-right">
+      <div class="h-time" id="clock">--:--:--</div>
+      <div class="h-status"><div class="h-dot"></div> LIVE FEED</div>
+      <div class="h-user">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        admin
+      </div>
+      <button class="h-logout" onclick="doLogout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- ALERT TICKER -->
+  <div class="alert-bar">
+    <div class="alert-label">
+      <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      ALERTS
+    </div>
+    <div class="ticker-wrap">
+      <div class="ticker">
+        <span>⚠ GATE-C:</span> Crowd density exceeds 85% capacity — monitor closely &nbsp;|&nbsp;
+        <span>🔴 ZONE-7:</span> Movement velocity spike detected — potential bottleneck &nbsp;|&nbsp;
+        <span>⚠ ENTRANCE-2:</span> Queue length: 340m — deploy additional staff &nbsp;|&nbsp;
+        <span>ℹ SECTOR-A:</span> VIP area at 60% — within normal parameters &nbsp;|&nbsp;
+        <span>✓ GATE-A:</span> Flow normalised after intervention at 14:32 &nbsp;|&nbsp;
+        <span>⚠ PARKING-P3:</span> Near capacity — redirect incoming vehicles
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- ZONE FILTER -->
+    <div class="zone-bar">
+      <span class="zone-label">Zone</span>
+      <button class="zone-btn active">All Zones</button>
+      <button class="zone-btn">Gate A</button>
+      <button class="zone-btn">Gate B</button>
+      <button class="zone-btn">Gate C</button>
+      <button class="zone-btn">Main Stage</button>
+      <button class="zone-btn">Food Court</button>
+      <button class="zone-btn">Parking</button>
+      <button class="zone-btn">VIP</button>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card warn">
+        <div class="kpi-label">
+          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          Total Crowd
+        </div>
+        <div class="kpi-val">24,381</div>
+        <div class="cap-bar"><div class="cap-fill" style="width:81%;background:var(--warn);"></div></div>
+        <div class="kpi-change up">↑ +1,240 last 30 min</div>
+        <div class="kpi-sub">Capacity: 30,000</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Avg Density</div>
+        <div class="kpi-val">3.2<span class="kpi-unit">p/m²</span></div>
+        <div class="cap-bar"><div class="cap-fill" style="width:53%;background:var(--accent2);"></div></div>
+        <div class="kpi-change neutral">→ Moderate</div>
+        <div class="kpi-sub">Safe limit: 6 p/m²</div>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-label">Critical Zones</div>
+        <div class="kpi-val" style="color:var(--danger);">3</div>
+        <div class="kpi-change down">↑ +2 since 14:00</div>
+        <div class="kpi-sub">Gate-C · Zone-7 · P3</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Entry Rate</div>
+        <div class="kpi-val big">1,840<span class="kpi-unit">/hr</span></div>
+        <div class="kpi-change up">↑ Peak period active</div>
+        <div class="kpi-sub">Exit: 620/hr</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Dwell Time</div>
+        <div class="kpi-val big">2<span class="kpi-unit">h 14m</span></div>
+        <div class="kpi-change down">↓ −12 min vs. yesterday</div>
+        <div class="kpi-sub">Target: 2–3 hrs</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Active Cameras</div>
+        <div class="kpi-val" style="color:var(--accent2);">48<span class="kpi-unit">/52</span></div>
+        <div class="kpi-change neutral">4 offline · maintenance</div>
+        <div class="kpi-sub">99.1% uptime today</div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="charts-row">
+      <!-- Crowd Flow -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">Crowd Flow — Today</div>
+          <div class="chart-badge live">● LIVE</div>
+        </div>
+        <div class="chart-wrap"><canvas id="flowChart" height="100"></canvas></div>
+      </div>
+      <!-- Zone Density -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">Zone Density</div>
+          <div class="chart-badge warn">⚠ 3 CRITICAL</div>
+        </div>
+        <div class="chart-wrap"><canvas id="densityChart" height="180"></canvas></div>
+      </div>
+      <!-- Incident Types -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">Incident Types</div>
+          <div class="chart-badge">Today</div>
+        </div>
+        <div class="chart-wrap"><canvas id="incidentPie" height="180"></canvas></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM ROW -->
+    <div class="bottom-row">
+
+      <!-- Zone Table -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">Zone Status</div>
+          <div class="chart-badge live">● LIVE</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Zone</th><th>Count</th><th>Cap%</th><th>Density</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="zone-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Incident Log -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">Incident Log</div>
+          <div class="chart-badge warn">12 Today</div>
+        </div>
+        <div class="incident-list" id="incident-log"></div>
+      </div>
+
+      <!-- Heatmap -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">Density Heatmap</div>
+          <div class="chart-badge">Venue Overview</div>
+        </div>
+        <div id="heatmap" class="heatmap-grid"></div>
+        <div class="hm-labels">
+          <span>W</span><span>→ EAST WING →</span><span>E</span>
+        </div>
+        <div style="margin-top:10px;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text3);">
+          <span>Low</span>
+          <div style="flex:1;height:6px;background:linear-gradient(90deg,#0d2a1a,#00ff9d,#ffcc00,#ff3b5c);border-radius:2px;"></div>
+          <span>Critical</span>
+        </div>
+
+        <!-- Hourly entry/exit bar chart -->
+        <div style="margin-top:14px;">
+          <div class="chart-header" style="margin-bottom:10px;">
+            <div class="chart-title" style="font-size:11px;">Hourly Entry vs Exit</div>
+          </div>
+          <canvas id="entryExitChart" height="90"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">
+      <div style="display:flex;align-items:center;gap:6px;"><div class="footer-dot" style="background:var(--accent2);"></div>System Online</div>
+      <span>Data refresh: 15s</span>
+      <span>Sensors: 52 active</span>
+      <span>AI Engine: v3.4.1</span>
+    </div>
+    <div>CrowdSense Monitoring Platform · Venue Control Room</div>
+  </footer>
+</div>
+
+<script>
+/* ═══════════════════ AUTH ═══════════════════ */
+const CREDS = { admin: 'crowd@2025' };
+
+function doLogin() {
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value;
+  if (CREDS[u] && CREDS[u] === p) {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('dashboard-page').style.display = 'flex';
+    initDashboard();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('password').value = '';
+  }
+}
+function doLogout() {
+  document.getElementById('dashboard-page').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-page').style.display !== 'none') doLogin();
+});
+
+/* zone buttons */
+document.querySelectorAll('.zone-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.zone-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+/* ═══════════════════ CLOCK ═══════════════════ */
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+}
+setInterval(updateClock, 1000); updateClock();
+
+/* ═══════════════════ DATA ═══════════════════ */
+const hours = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
+const entryData = [820,1450,2100,3200,4500,5300,6100,5800,4900,4200,3600,2800,1900,950];
+const exitData  = [120,210,400,650,900,1200,1600,2100,2500,2800,2900,2600,2100,1400];
+const crowdFlow = entryData.map((v,i)=> {
+  let c=0; for(let j=0;j<=i;j++) c+=entryData[j]-exitData[j]; return Math.max(0,c);
+});
+
+const zones = [
+  { name:'Main Stage',  count:8200, cap:10000, density:5.8, status:'warn' },
+  { name:'Gate A',      count:1400, cap:3000,  density:1.2, status:'ok'   },
+  { name:'Gate B',      count:1900, cap:3000,  density:1.7, status:'ok'   },
+  { name:'Gate C',      count:2800, cap:3000,  density:6.4, status:'crit' },
+  { name:'Food Court',  count:3100, cap:4000,  density:3.9, status:'warn' },
+  { name:'VIP Area',    count:1200, cap:2000,  density:2.1, status:'ok'   },
+  { name:'Zone 7',      count:2600, cap:2800,  density:6.9, status:'crit' },
+  { name:'Parking P3',  count:2900, cap:3000,  density:4.8, status:'crit' },
+  { name:'East Wing',   count:780,  cap:2000,  density:0.9, status:'ok'   },
+];
+
+const incidents = [
+  { type:'crit', title:'Crowd surge detected — Gate C', meta:'Zone: Gate C · Cam 14', time:'15:42', icon:'danger' },
+  { type:'crit', title:'Bottleneck — Zone 7 east exit', meta:'Zone: Zone 7 · Cam 27', time:'15:38', icon:'danger' },
+  { type:'warn', title:'Queue >300m — Entrance 2',     meta:'Zone: Gate B · Cam 06', time:'15:21', icon:'warn' },
+  { type:'warn', title:'High density — Food Court',    meta:'Zone: Food Court · Cam 19', time:'14:55', icon:'warn' },
+  { type:'info', title:'Staff deployed — Gate C',      meta:'Response: 8 personnel', time:'14:50', icon:'info' },
+  { type:'info', title:'Flow normalized — Gate A',     meta:'Zone: Gate A · Cam 02', time:'14:32', icon:'info' },
+];
+
+const heatData = [
+  [0.1,0.2,0.3,0.6,0.7,0.4,0.2,0.1],
+  [0.2,0.4,0.6,0.9,0.95,0.7,0.4,0.2],
+  [0.3,0.5,0.7,0.85,0.9,0.85,0.6,0.3],
+  [0.2,0.4,0.65,0.8,0.75,0.65,0.5,0.2],
+  [0.1,0.2,0.4,0.5,0.5,0.4,0.3,0.1],
+];
+
+/* ═══════════════════ INIT DASHBOARD ═══════════════════ */
+function initDashboard() {
+  renderZoneTable();
+  renderIncidents();
+  renderHeatmap();
+  renderFlowChart();
+  renderDensityChart();
+  renderIncidentPie();
+  renderEntryExitChart();
+}
+
+/* ── Zone Table ── */
+function renderZoneTable() {
+  const body = document.getElementById('zone-table-body');
+  body.innerHTML = zones.map(z => {
+    const pct = Math.round(z.count / z.cap * 100);
+    const colors = { ok:'#00ff9d', warn:'#ffcc00', crit:'#ff3b5c' };
+    const col = colors[z.status];
+    const pills = { ok:'pill-ok', warn:'pill-warn', crit:'pill-crit' };
+    const labels = { ok:'Normal', warn:'Warning', crit:'Critical' };
+    return `<tr>
+      <td class="td-zone">${z.name}</td>
+      <td>${z.count.toLocaleString()}</td>
+      <td style="font-family:'Share Tech Mono',monospace;color:${col}">${pct}%</td>
+      <td>
+        <div class="density-bar">
+          <div class="density-fill" style="width:${Math.min(z.density/8*100,100)}%;background:${col};"></div>
+        </div>
+        <div style="font-size:10px;color:var(--text2);margin-top:2px;">${z.density} p/m²</div>
+      </td>
+      <td><span class="status-pill ${pills[z.status]}">${labels[z.status]}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Incidents ── */
+function renderIncidents() {
+  const svgDanger = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
+  const svgWarn   = `<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>`;
+  const svgInfo   = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`;
+  const icons = { danger: svgDanger, warn: svgWarn, info: svgInfo };
+  document.getElementById('incident-log').innerHTML = incidents.map(inc => `
+    <div class="incident">
+      <div class="inc-icon ${inc.type}">${icons[inc.icon]}</div>
+      <div class="inc-body">
+        <div class="inc-title">${inc.title}</div>
+        <div class="inc-meta">${inc.meta}</div>
+      </div>
+      <div class="inc-time">Today ${inc.time}</div>
+    </div>
+  `).join('');
+}
+
+/* ── Heatmap ── */
+function renderHeatmap() {
+  const grid = document.getElementById('heatmap');
+  grid.innerHTML = '';
+  heatData.forEach((row, ri) => {
+    row.forEach((val, ci) => {
+      const cell = document.createElement('div');
+      cell.className = 'hm-cell';
+      const r = Math.round(val < 0.5 ? val*2*13 : 13 + (val-0.5)*2*242);
+      const g = Math.round(val < 0.5 ? 13+val*2*242 : 255 - (val-0.5)*2*242);
+      const b = Math.round(val < 0.3 ? 154 - val*(154/0.3) : 0);
+      cell.style.background = `rgba(${r},${g},${b},0.85)`;
+      cell.setAttribute('data-tip', `Row ${ri+1}-Col ${ci+1}: ${Math.round(val*100)}% density`);
+      grid.appendChild(cell);
+    });
+  });
+}
+
+/* ═══════════════════ CHARTS ═══════════════════ */
+const chartDefaults = () => ({
+  color: '#6a8fa5',
+  plugins: { legend: { display: false }, tooltip: {
+    backgroundColor: '#0f1a22', borderColor: '#254055', borderWidth: 1,
+    titleColor: '#c8dde8', bodyColor: '#6a8fa5',
+    titleFont: { family: "'Share Tech Mono'" }, bodyFont: { family: "'Barlow'" }
+  }},
+  scales: {
+    x: { grid: { color: 'rgba(30,48,64,0.8)' }, ticks: { color: '#3a6070', font: { size: 10, family: "'Barlow Condensed'" } } },
+    y: { grid: { color: 'rgba(30,48,64,0.8)' }, ticks: { color: '#3a6070', font: { size: 10, family: "'Barlow Condensed'" } } }
+  }
+});
+
+/* Crowd Flow */
+function renderFlowChart() {
+  new Chart(document.getElementById('flowChart'), {
+    type: 'line',
+    data: {
+      labels: hours,
+      datasets: [{
+        label: 'Total Crowd',
+        data: crowdFlow,
+        borderColor: '#00d4ff', borderWidth: 2,
+        pointBackgroundColor: '#00d4ff', pointRadius: 3,
+        fill: true,
+        backgroundColor: (ctx) => {
+          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
+          g.addColorStop(0, 'rgba(0,212,255,0.25)');
+          g.addColorStop(1, 'rgba(0,212,255,0.01)');
+          return g;
+        },
+        tension: 0.4
+      }]
+    },
+    options: {
+      ...chartDefaults(),
+      plugins: {
+        ...chartDefaults().plugins,
+        annotation: {},
+      }
+    }
+  });
+}
+
+/* Zone Density bar */
+function renderDensityChart() {
+  const colors = zones.map(z => z.status === 'crit' ? '#ff3b5c' : z.status === 'warn' ? '#ffcc00' : '#00ff9d');
+  new Chart(document.getElementById('densityChart'), {
+    type: 'bar',
+    data: {
+      labels: zones.map(z => z.name.length > 10 ? z.name.slice(0,9)+'…' : z.name),
+      datasets: [{ data: zones.map(z=>z.density), backgroundColor: colors, borderWidth: 0, borderRadius: 2 }]
+    },
+    options: {
+      ...chartDefaults(),
+      indexAxis: 'y',
+      plugins: { ...chartDefaults().plugins },
+      scales: {
+        x: { ...chartDefaults().scales.x, max: 8, grid: { color: 'rgba(30,48,64,0.6)' }, ticks: { color:'#3a6070', font:{size:9,family:"'Barlow Condensed'"} } },
+        y: { ...chartDefaults().scales.y, grid: { display: false }, ticks: { color:'#c8dde8', font:{size:10,family:"'Barlow Condensed'"} } }
+      }
+    }
+  });
+}
+
+/* Incident Pie */
+function renderIncidentPie() {
+  new Chart(document.getElementById('incidentPie'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Crowd Surge','Bottleneck','Queue Overflow','Camera Fault','Staff Alert','Other'],
+      datasets: [{
+        data: [4, 3, 2, 1, 1, 1],
+        backgroundColor: ['#ff3b5c','#ff6b35','#ffcc00','#00d4ff','#00ff9d','#3a6070'],
+        borderWidth: 0, hoverOffset: 6
+      }]
+    },
+    options: {
+      cutout: '65%',
+      plugins: {
+        legend: {
+          display: true, position: 'bottom',
+          labels: { color: '#6a8fa5', font: { size: 10, family: "'Barlow'" }, padding: 10, boxWidth: 10, boxHeight: 10 }
+        },
+        tooltip: chartDefaults().plugins.tooltip
+      }
+    }
+  });
+}
+
+/* Entry vs Exit hourly bar */
+function renderEntryExitChart() {
+  new Chart(document.getElementById('entryExitChart'), {
+    type: 'bar',
+    data: {
+      labels: hours,
+      datasets: [
+        { label:'Entry', data: entryData, backgroundColor:'rgba(0,212,255,0.7)', borderWidth:0, borderRadius:2 },
+        { label:'Exit',  data: exitData,  backgroundColor:'rgba(255,59,92,0.6)', borderWidth:0, borderRadius:2 }
+      ]
+    },
+    options: {
+      ...chartDefaults(),
+      plugins: {
+        ...chartDefaults().plugins,
+        legend: { display: true, position:'top', labels:{ color:'#6a8fa5', font:{size:9,family:"'Barlow'"}, padding:8, boxWidth:8, boxHeight:8 } }
+      },
+      scales: {
+        x: { stacked:false, grid:{display:false}, ticks:{color:'#3a6070', font:{size:8,family:"'Barlow Condensed'"},maxRotation:45} },
+        y: { grid:{color:'rgba(30,48,64,0.6)'}, ticks:{color:'#3a6070', font:{size:9,family:"'Barlow Condensed'"}} }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
