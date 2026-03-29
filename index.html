@@ -415,48 +415,54 @@
   <!-- OVERVIEW TAB -->
   <div class="tab-panel active" id="panel-overview">
     <main class="main">
-      <div class="zone-bar">
-        <span class="zone-label">Zone</span>
-        <button class="zone-btn active">All Zones</button>
-        <button class="zone-btn">Gate A</button>
-        <button class="zone-btn">Gate B</button>
-        <button class="zone-btn">Gate C</button>
-        <button class="zone-btn">Main Stage</button>
-        <button class="zone-btn">Food Court</button>
-        <button class="zone-btn">Parking</button>
-        <button class="zone-btn">VIP</button>
+      <div class="zone-bar" id="zone-filter-bar">
+        <span class="zone-label">Location</span>
+        <button class="zone-btn active" data-id="all">All Locations</button>
+        <!-- populated dynamically from server -->
       </div>
       <div class="kpi-grid">
-        <div class="kpi-card warn">
+        <div class="kpi-card" id="kpi-total-card">
           <div class="kpi-label"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Total Crowd</div>
-          <div class="kpi-val">24,381</div><div class="cap-bar"><div class="cap-fill" style="width:81%;background:var(--warn);"></div></div>
-          <div class="kpi-change up">↑ +1,240 last 30 min</div><div class="kpi-sub">Capacity: 30,000</div>
+          <div class="kpi-val" id="kpi-total-val">—</div>
+          <div class="cap-bar"><div class="cap-fill" id="kpi-total-bar" style="width:0%;background:var(--warn);"></div></div>
+          <div class="kpi-change" id="kpi-total-change">—</div>
+          <div class="kpi-sub" id="kpi-total-sub">—</div>
         </div>
-        <div class="kpi-card green">
-          <div class="kpi-label">Avg Density</div><div class="kpi-val">3.2<span class="kpi-unit">p/m²</span></div>
-          <div class="cap-bar"><div class="cap-fill" style="width:53%;background:var(--accent2);"></div></div>
-          <div class="kpi-change neutral">→ Moderate</div><div class="kpi-sub">Safe limit: 6 p/m²</div>
+        <div class="kpi-card" id="kpi-density-card">
+          <div class="kpi-label">Avg Density</div>
+          <div class="kpi-val" id="kpi-density-val">—</div>
+          <div class="cap-bar"><div class="cap-fill" id="kpi-density-bar" style="width:0%;background:var(--accent2);"></div></div>
+          <div class="kpi-change neutral" id="kpi-density-change">—</div>
+          <div class="kpi-sub">Safe limit: 7 p/m²</div>
         </div>
-        <div class="kpi-card danger">
-          <div class="kpi-label">Critical Zones</div><div class="kpi-val" style="color:var(--danger);">3</div>
-          <div class="kpi-change down">↑ +2 since 14:00</div><div class="kpi-sub">Gate-C · Zone-7 · P3</div>
+        <div class="kpi-card" id="kpi-critical-card">
+          <div class="kpi-label">Critical Locations</div>
+          <div class="kpi-val" id="kpi-critical-val" style="color:var(--danger);">—</div>
+          <div class="kpi-change down" id="kpi-critical-change">—</div>
+          <div class="kpi-sub" id="kpi-critical-sub">—</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Entry Rate</div><div class="kpi-val big">1,840<span class="kpi-unit">/hr</span></div>
-          <div class="kpi-change up">↑ Peak period active</div><div class="kpi-sub">Exit: 620/hr</div>
+        <div class="kpi-card" id="kpi-highrisk-card">
+          <div class="kpi-label">Highest Risk Zone</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;line-height:1.2;color:var(--white);margin-top:6px;" id="kpi-highrisk-val">—</div>
+          <div class="kpi-change" id="kpi-highrisk-change">—</div>
+          <div class="kpi-sub" id="kpi-highrisk-sub">—</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Avg Dwell Time</div><div class="kpi-val big">2<span class="kpi-unit">h 14m</span></div>
-          <div class="kpi-change down">↓ −12 min vs. yesterday</div><div class="kpi-sub">Target: 2–3 hrs</div>
+        <div class="kpi-card" id="kpi-dwell-card">
+          <div class="kpi-label">Avg Dwell Time</div>
+          <div class="kpi-val big" id="kpi-dwell-val">—</div>
+          <div class="kpi-change neutral" id="kpi-dwell-change">—</div>
+          <div class="kpi-sub">Across all locations</div>
         </div>
-        <div class="kpi-card green">
-          <div class="kpi-label">Active Cameras</div><div class="kpi-val" style="color:var(--accent2);">48<span class="kpi-unit">/52</span></div>
-          <div class="kpi-change neutral">4 offline · maintenance</div><div class="kpi-sub">99.1% uptime today</div>
+        <div class="kpi-card green" id="kpi-cameras-card">
+          <div class="kpi-label">Active Cameras</div>
+          <div class="kpi-val" id="kpi-cameras-val" style="color:var(--accent2);">—</div>
+          <div class="kpi-change neutral" id="kpi-cameras-change">—</div>
+          <div class="kpi-sub" id="kpi-cameras-sub">—</div>
         </div>
       </div>
       <div class="charts-row">
         <div class="chart-card"><div class="chart-header"><div class="chart-title">Crowd Flow — Today</div><div class="chart-badge live">● LIVE</div></div><canvas id="flowChart" height="100"></canvas></div>
-        <div class="chart-card"><div class="chart-header"><div class="chart-title">Zone Density</div><div class="chart-badge warn">⚠ 3 CRITICAL</div></div><canvas id="densityChart" height="180"></canvas></div>
+        <div class="chart-card"><div class="chart-header"><div class="chart-title">Zone Density</div><div class="chart-badge warn" id="density-badge">⚠ — CRITICAL</div></div><canvas id="densityChart" height="180"></canvas></div>
         <div class="chart-card"><div class="chart-header"><div class="chart-title">Incident Types</div><div class="chart-badge">Today</div></div><canvas id="incidentPie" height="180"></canvas></div>
       </div>
       <div class="bottom-row">
@@ -744,58 +750,279 @@ function closeStream() {
 }
 
 /* ═══ OVERVIEW CHARTS ═══ */
+const API = 'http://127.0.0.1:8000';
+let overviewData = [];        // last fetched server data
+let activeFilter = 'all';     // currently selected location filter
+let densityChartInst = null;  // Chart.js instance refs so we can update them
+let flowChartInst = null;
+let pieChartInst = null;
+let entryExitChartInst = null;
+
+// Static hourly flow (simulated — server doesn't expose hourly history)
 const hours = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
 const entryData = [820,1450,2100,3200,4500,5300,6100,5800,4900,4200,3600,2800,1900,950];
 const exitData  = [120,210,400,650,900,1200,1600,2100,2500,2800,2900,2600,2100,1400];
-const crowdFlow = entryData.map((v,i)=>{ let c=0; for(let j=0;j<=i;j++) c+=entryData[j]-exitData[j]; return Math.max(0,c); });
+const crowdFlow = entryData.map((_,i)=>{ let c=0; for(let j=0;j<=i;j++) c+=entryData[j]-exitData[j]; return Math.max(0,c); });
 
-const zones = [
-  { name:'Main Stage', count:8200, cap:10000, density:5.8, status:'warn' },
-  { name:'Gate A',     count:1400, cap:3000,  density:1.2, status:'ok'   },
-  { name:'Gate B',     count:1900, cap:3000,  density:1.7, status:'ok'   },
-  { name:'Gate C',     count:2800, cap:3000,  density:6.4, status:'crit' },
-  { name:'Food Court', count:3100, cap:4000,  density:3.9, status:'warn' },
-  { name:'VIP Area',   count:1200, cap:2000,  density:2.1, status:'ok'   },
-  { name:'Zone 7',     count:2600, cap:2800,  density:6.9, status:'crit' },
-  { name:'Parking P3', count:2900, cap:3000,  density:4.8, status:'crit' },
-  { name:'East Wing',  count:780,  cap:2000,  density:0.9, status:'ok'   },
-];
-const incidents = [
-  { type:'crit', title:'Crowd surge detected — Gate C', meta:'Zone: Gate C · Cam 14', time:'15:42', icon:'danger' },
-  { type:'crit', title:'Bottleneck — Zone 7 east exit', meta:'Zone: Zone 7 · Cam 27', time:'15:38', icon:'danger' },
-  { type:'warn', title:'Queue >300m — Entrance 2',     meta:'Zone: Gate B · Cam 06', time:'15:21', icon:'warn' },
-  { type:'warn', title:'High density — Food Court',    meta:'Zone: Food Court · Cam 19', time:'14:55', icon:'warn' },
-  { type:'info', title:'Staff deployed — Gate C',      meta:'Response: 8 personnel', time:'14:50', icon:'info' },
-  { type:'info', title:'Flow normalized — Gate A',     meta:'Zone: Gate A · Cam 02', time:'14:32', icon:'info' },
-];
 const heatData = [
   [0.1,0.2,0.3,0.6,0.7,0.4,0.2,0.1],[0.2,0.4,0.6,0.9,0.95,0.7,0.4,0.2],
   [0.3,0.5,0.7,0.85,0.9,0.85,0.6,0.3],[0.2,0.4,0.65,0.8,0.75,0.65,0.5,0.2],
   [0.1,0.2,0.4,0.5,0.5,0.4,0.3,0.1],
 ];
 
-function initDashboard() {
-  renderZoneTable(); renderIncidents(); renderHeatmap();
-  renderFlowChart(); renderDensityChart(); renderIncidentPie(); renderEntryExitChart();
+/* ── Fetch overview data from server ── */
+async function fetchOverviewData() {
+  try {
+    const res = await fetch(`${API}/cities`);
+    const data = await res.json();
+    overviewData = data;
+    updateOverview();
+  } catch(e) {
+    console.error('Overview fetch error:', e);
+  }
 }
-function renderZoneTable() {
+
+/* ── Filter helpers ── */
+function getFilteredData() {
+  if (activeFilter === 'all') return overviewData;
+  return overviewData.filter(c => c.id === activeFilter);
+}
+
+/* ── Rebuild zone filter buttons from server data ── */
+function buildZoneFilterBar(data) {
+  const bar = document.getElementById('zone-filter-bar');
+  // keep the label and All button, add one per city
+  const existingBtns = bar.querySelectorAll('.zone-btn[data-id]');
+  existingBtns.forEach(b => { if (b.dataset.id !== 'all') b.remove(); });
+
+  data.forEach(city => {
+    if (bar.querySelector(`[data-id="${city.id}"]`)) return; // already exists
+    const btn = document.createElement('button');
+    btn.className = 'zone-btn';
+    btn.dataset.id = city.id;
+    btn.textContent = city.name;
+    btn.addEventListener('click', () => {
+      bar.querySelectorAll('.zone-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = city.id;
+      updateOverview();
+    });
+    bar.appendChild(btn);
+  });
+
+  // "All" button click handler (attached once)
+  const allBtn = bar.querySelector('[data-id="all"]');
+  if (!allBtn._bound) {
+    allBtn._bound = true;
+    allBtn.addEventListener('click', () => {
+      bar.querySelectorAll('.zone-btn').forEach(b => b.classList.remove('active'));
+      allBtn.classList.add('active');
+      activeFilter = 'all';
+      updateOverview();
+    });
+  }
+}
+
+/* ── Master update called after every fetch ── */
+function updateOverview() {
+  if (!overviewData.length) return;
+  buildZoneFilterBar(overviewData);
+
+  const filtered = getFilteredData();
+  updateKPIs(filtered);
+  updateZoneTable(filtered);
+  updateDensityChart(filtered);
+  updateIncidentLog(filtered);
+  updateAlertTicker(filtered);
+}
+
+/* ── KPI Cards ── */
+function updateKPIs(data) {
+  // Total crowd & capacity
+  const totalCrowd    = data.reduce((s,c) => s + c.crowd, 0);
+  const totalCapacity = data.reduce((s,c) => s + c.capacity, 0);
+  const capPct        = totalCapacity > 0 ? Math.round(totalCrowd / totalCapacity * 100) : 0;
+
+  document.getElementById('kpi-total-val').textContent = totalCrowd.toLocaleString();
+  document.getElementById('kpi-total-sub').textContent = `Capacity: ${totalCapacity.toLocaleString()}`;
+  const totalBar = document.getElementById('kpi-total-bar');
+  totalBar.style.width = capPct + '%';
+  const totalCard = document.getElementById('kpi-total-card');
+  totalCard.className = 'kpi-card ' + (capPct > 85 ? 'danger' : capPct > 65 ? 'warn' : 'green');
+  totalBar.style.background = capPct > 85 ? 'var(--danger)' : capPct > 65 ? 'var(--warn)' : 'var(--accent2)';
+
+  const tChange = document.getElementById('kpi-total-change');
+  tChange.textContent = `${capPct}% capacity used`;
+  tChange.className = 'kpi-change ' + (capPct > 85 ? 'down' : capPct > 65 ? 'neutral' : 'up');
+
+  // Avg density
+  const avgDensity = data.length > 0 ? (data.reduce((s,c) => s + c.density, 0) / data.length).toFixed(1) : '0';
+  document.getElementById('kpi-density-val').innerHTML = `${avgDensity}<span class="kpi-unit">p/m²</span>`;
+  const dPct = Math.min(parseFloat(avgDensity) / 7 * 100, 100);
+  const densBar = document.getElementById('kpi-density-bar');
+  densBar.style.width = dPct + '%';
+  densBar.style.background = dPct > 85 ? 'var(--danger)' : dPct > 57 ? 'var(--warn)' : 'var(--accent2)';
+  const densCard = document.getElementById('kpi-density-card');
+  densCard.className = 'kpi-card ' + (parseFloat(avgDensity) > 6 ? 'danger' : parseFloat(avgDensity) > 4 ? 'warn' : 'green');
+  document.getElementById('kpi-density-change').textContent =
+    parseFloat(avgDensity) > 6 ? '→ Critical density' : parseFloat(avgDensity) > 4 ? '→ High density' : '→ Moderate';
+
+  // Critical locations
+  const critCount = data.filter(c => c.risk === 'danger' || c.risk === 'high').length;
+  document.getElementById('kpi-critical-val').textContent = critCount;
+  const critCard = document.getElementById('kpi-critical-card');
+  critCard.className = 'kpi-card ' + (critCount > 2 ? 'danger' : critCount > 0 ? 'warn' : 'green');
+  document.getElementById('kpi-critical-change').textContent = critCount > 0
+    ? '⚠ Requires attention'
+    : '✓ All clear';
+  const critNames = data.filter(c => c.risk === 'danger' || c.risk === 'high').map(c => c.name).slice(0,3);
+  document.getElementById('kpi-critical-sub').textContent = critNames.length ? critNames.join(' · ') : 'No critical locations';
+
+  // Highest risk zone
+  const sorted = [...data].sort((a,b) => b.density - a.density);
+  const top = sorted[0];
+  if (top) {
+    document.getElementById('kpi-highrisk-val').textContent = top.name;
+    const rMap = {danger:'var(--danger)',high:'var(--accent3)',medium:'var(--warn)',low:'var(--accent2)'};
+    document.getElementById('kpi-highrisk-val').style.color = rMap[top.risk] || 'var(--white)';
+    document.getElementById('kpi-highrisk-change').textContent = top.trendRate + ' · ' + top.risk.toUpperCase();
+    document.getElementById('kpi-highrisk-change').className = 'kpi-change ' + (top.trend === 'up' ? 'down' : top.trend === 'down' ? 'up' : 'neutral');
+    document.getElementById('kpi-highrisk-sub').textContent = `Density: ${top.density} p/m²`;
+    document.getElementById('kpi-highrisk-card').className = 'kpi-card ' + (top.risk === 'danger' ? 'danger' : top.risk === 'high' ? 'warn' : '');
+  }
+
+  // Avg dwell time (from server data)
+  const dwellTimes = data.map(c => c.dwell).filter(Boolean);
+  document.getElementById('kpi-dwell-val').textContent = dwellTimes.length ? dwellTimes[0] : '—';
+  document.getElementById('kpi-dwell-change').textContent = `${dwellTimes.length} location${dwellTimes.length !== 1 ? 's' : ''} reporting`;
+
+  // Active cameras — sum from cameras field "x/y"
+  let camOn = 0, camTotal = 0;
+  data.forEach(c => {
+    if (c.cameras) {
+      const parts = c.cameras.split('/');
+      camOn += parseInt(parts[0]) || 0;
+      camTotal += parseInt(parts[1]) || 0;
+    }
+  });
+  document.getElementById('kpi-cameras-val').innerHTML = camTotal > 0
+    ? `${camOn}<span class="kpi-unit">/${camTotal}</span>`
+    : '—';
+  const offline = camTotal - camOn;
+  document.getElementById('kpi-cameras-change').textContent = offline > 0
+    ? `${offline} offline · maintenance`
+    : '✓ All cameras online';
+  document.getElementById('kpi-cameras-sub').textContent = camTotal > 0
+    ? `${Math.round(camOn/camTotal*100)}% uptime`
+    : '';
+}
+
+/* ── Zone Status Table ── */
+function updateZoneTable(data) {
   const body = document.getElementById('zone-table-body');
-  body.innerHTML = zones.map(z => {
-    const pct = Math.round(z.count/z.cap*100);
-    const colors={ok:'#00ff9d',warn:'#ffcc00',crit:'#ff3b5c'};
-    const col=colors[z.status];
-    const pills={ok:'pill-ok',warn:'pill-warn',crit:'pill-crit'};
-    const labels={ok:'Normal',warn:'Warning',crit:'Critical'};
-    return `<tr><td class="td-zone">${z.name}</td><td>${z.count.toLocaleString()}</td><td style="font-family:'Share Tech Mono',monospace;color:${col}">${pct}%</td><td><div class="density-bar"><div class="density-fill" style="width:${Math.min(z.density/8*100,100)}%;background:${col};"></div></div><div style="font-size:10px;color:var(--text2);margin-top:2px;">${z.density} p/m²</div></td><td><span class="status-pill ${pills[z.status]}">${labels[z.status]}</span></td></tr>`;
+  const riskToStatus = { danger:'crit', high:'warn', medium:'ok', low:'ok' };
+  const riskToPill   = { danger:'pill-crit', high:'pill-warn', medium:'pill-ok', low:'pill-ok' };
+  const riskToLabel  = { danger:'Critical', high:'Warning', medium:'Normal', low:'Normal' };
+  const riskToColor  = { danger:'#ff3b5c', high:'#ffcc00', medium:'#00ff9d', low:'#00ff9d' };
+
+  body.innerHTML = data.map(z => {
+    const pct = Math.round(z.crowd / z.capacity * 100);
+    const col = riskToColor[z.risk] || '#00ff9d';
+    return `<tr>
+      <td class="td-zone">${z.name}</td>
+      <td>${z.crowd.toLocaleString()}</td>
+      <td style="font-family:'Share Tech Mono',monospace;color:${col}">${pct}%</td>
+      <td>
+        <div class="density-bar"><div class="density-fill" style="width:${Math.min(z.density/8*100,100)}%;background:${col};"></div></div>
+        <div style="font-size:10px;color:var(--text2);margin-top:2px;">${z.density} p/m²</div>
+      </td>
+      <td><span class="status-pill ${riskToPill[z.risk]}">${riskToLabel[z.risk]}</span></td>
+    </tr>`;
   }).join('');
 }
-function renderIncidents() {
+
+/* ── Density Chart ── */
+function updateDensityChart(data) {
+  const critCount = data.filter(c => c.risk === 'danger' || c.risk === 'high').length;
+  const badge = document.getElementById('density-badge');
+  if (badge) badge.textContent = critCount > 0 ? `⚠ ${critCount} CRITICAL` : '✓ ALL NORMAL';
+
+  const colors = data.map(z =>
+    z.risk === 'danger' ? '#ff3b5c' :
+    z.risk === 'high'   ? '#ffcc00' :
+    z.risk === 'medium' ? '#ff6b35' : '#00ff9d'
+  );
+  const labels = data.map(z => z.name.length > 12 ? z.name.slice(0,11) + '…' : z.name);
+  const values = data.map(z => z.density);
+
+  if (densityChartInst) {
+    densityChartInst.data.labels = labels;
+    densityChartInst.data.datasets[0].data = values;
+    densityChartInst.data.datasets[0].backgroundColor = colors;
+    densityChartInst.update('none');
+  }
+}
+
+/* ── Incident Log — generated from server risk data ── */
+function updateIncidentLog(data) {
+  const now = new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit' });
   const sd=`<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
   const sw=`<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>`;
   const si=`<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`;
-  const icons={danger:sd,warn:sw,info:si};
-  document.getElementById('incident-log').innerHTML = incidents.map(i=>`<div class="incident"><div class="inc-icon ${i.type}">${icons[i.icon]}</div><div class="inc-body"><div class="inc-title">${i.title}</div><div class="inc-meta">${i.meta}</div></div><div class="inc-time">Today ${i.time}</div></div>`).join('');
+
+  const incidents = [];
+  data.forEach(city => {
+    if (city.risk === 'danger') {
+      incidents.push({ type:'crit', icon:sd, title:`Critical density — ${city.name}`, meta:`${city.density} p/m² · ${city.crowd.toLocaleString()} people · ${city.cameras}` });
+    } else if (city.risk === 'high') {
+      incidents.push({ type:'warn', icon:sw, title:`High crowd load — ${city.name}`, meta:`${city.density} p/m² · ${city.trendRate} · ${city.trendDesc}` });
+    } else if (city.risk === 'medium') {
+      incidents.push({ type:'info', icon:si, title:`Moderate activity — ${city.name}`, meta:`${city.density} p/m² · ${city.trendRate} · Monitoring` });
+    } else {
+      incidents.push({ type:'info', icon:si, title:`Normal flow — ${city.name}`, meta:`${city.density} p/m² · ${city.cameras} cams active` });
+    }
+  });
+
+  const totalIncidents = incidents.length;
+  document.querySelector('#panel-overview .chart-badge.warn')
+    && (document.querySelector('#panel-overview .chart-badge.warn').textContent = `${totalIncidents} Locations`);
+
+  document.getElementById('incident-log').innerHTML = incidents.map(i => `
+    <div class="incident">
+      <div class="inc-icon ${i.type}">${i.icon}</div>
+      <div class="inc-body">
+        <div class="inc-title">${i.title}</div>
+        <div class="inc-meta">${i.meta}</div>
+      </div>
+      <div class="inc-time">Now ${now}</div>
+    </div>`).join('');
 }
+
+/* ── Alert Ticker — built from server data ── */
+function updateAlertTicker(data) {
+  const ticker = document.querySelector('.ticker');
+  if (!ticker) return;
+  const parts = data.map(city => {
+    const icon = city.risk === 'danger' ? '🔴' : city.risk === 'high' ? '⚠' : city.risk === 'medium' ? 'ℹ' : '✓';
+    return `<span>${icon} ${city.name.toUpperCase()}:</span> ${city.trendDesc} &nbsp;|&nbsp;`;
+  });
+  ticker.innerHTML = parts.join(' ');
+}
+
+/* ── Init dashboard (called on login) ── */
+function initDashboard() {
+  renderHeatmap();
+  renderFlowChart();
+  renderIncidentPie();
+  renderEntryExitChart();
+  renderDensityChartInit();
+  // fetch data and wire up the rest
+  fetchOverviewData();
+  // refresh every 5s
+  setInterval(fetchOverviewData, 5000);
+}
+
+/* ── Heatmap (static) ── */
 function renderHeatmap() {
   const grid = document.getElementById('heatmap'); grid.innerHTML='';
   heatData.forEach((row,ri) => row.forEach((val,ci) => {
@@ -808,20 +1035,64 @@ function renderHeatmap() {
     grid.appendChild(cell);
   }));
 }
+
 const CD=()=>({color:'#6a8fa5',plugins:{legend:{display:false},tooltip:{backgroundColor:'#0f1a22',borderColor:'#254055',borderWidth:1,titleColor:'#c8dde8',bodyColor:'#6a8fa5',titleFont:{family:"'Share Tech Mono'"},bodyFont:{family:"'Barlow'"}}},scales:{x:{grid:{color:'rgba(30,48,64,0.8)'},ticks:{color:'#3a6070',font:{size:10,family:"'Barlow Condensed'"}}},y:{grid:{color:'rgba(30,48,64,0.8)'},ticks:{color:'#3a6070',font:{size:10,family:"'Barlow Condensed'"}}}}});
+
 function renderFlowChart(){
-  new Chart(document.getElementById('flowChart'),{type:'line',data:{labels:hours,datasets:[{label:'Total Crowd',data:crowdFlow,borderColor:'#00d4ff',borderWidth:2,pointBackgroundColor:'#00d4ff',pointRadius:3,fill:true,backgroundColor:(ctx)=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,300);g.addColorStop(0,'rgba(0,212,255,0.25)');g.addColorStop(1,'rgba(0,212,255,0.01)');return g;},tension:0.4}]},options:{...CD(),plugins:{...CD().plugins}}});
+  flowChartInst = new Chart(document.getElementById('flowChart'),{type:'line',data:{labels:hours,datasets:[{label:'Total Crowd',data:crowdFlow,borderColor:'#00d4ff',borderWidth:2,pointBackgroundColor:'#00d4ff',pointRadius:3,fill:true,backgroundColor:(ctx)=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,300);g.addColorStop(0,'rgba(0,212,255,0.25)');g.addColorStop(1,'rgba(0,212,255,0.01)');return g;},tension:0.4}]},options:{...CD(),plugins:{...CD().plugins}}});
 }
-function renderDensityChart(){
-  const colors=zones.map(z=>z.status==='crit'?'#ff3b5c':z.status==='warn'?'#ffcc00':'#00ff9d');
-  new Chart(document.getElementById('densityChart'),{type:'bar',data:{labels:zones.map(z=>z.name.length>10?z.name.slice(0,9)+'…':z.name),datasets:[{data:zones.map(z=>z.density),backgroundColor:colors,borderWidth:0,borderRadius:2}]},options:{...CD(),indexAxis:'y',plugins:{...CD().plugins},scales:{x:{...CD().scales.x,max:8,grid:{color:'rgba(30,48,64,0.6)'},ticks:{color:'#3a6070',font:{size:9,family:"'Barlow Condensed'"}}},y:{...CD().scales.y,grid:{display:false},ticks:{color:'#c8dde8',font:{size:10,family:"'Barlow Condensed'"}}}}}});
+
+function renderDensityChartInit(){
+  // initialise with empty data; updateDensityChart() will fill it
+  densityChartInst = new Chart(document.getElementById('densityChart'),{
+    type:'bar',
+    data:{ labels:[], datasets:[{data:[],backgroundColor:[],borderWidth:0,borderRadius:2}] },
+    options:{
+      ...CD(), indexAxis:'y', plugins:{...CD().plugins},
+      scales:{
+        x:{...CD().scales.x,max:8,grid:{color:'rgba(30,48,64,0.6)'},ticks:{color:'#3a6070',font:{size:9,family:"'Barlow Condensed'"}}},
+        y:{...CD().scales.y,grid:{display:false},ticks:{color:'#c8dde8',font:{size:10,family:"'Barlow Condensed'"}}}
+      }
+    }
+  });
 }
+
 function renderIncidentPie(){
-  new Chart(document.getElementById('incidentPie'),{type:'doughnut',data:{labels:['Crowd Surge','Bottleneck','Queue Overflow','Camera Fault','Staff Alert','Other'],datasets:[{data:[4,3,2,1,1,1],backgroundColor:['#ff3b5c','#ff6b35','#ffcc00','#00d4ff','#00ff9d','#3a6070'],borderWidth:0,hoverOffset:6}]},options:{cutout:'65%',plugins:{legend:{display:true,position:'bottom',labels:{color:'#6a8fa5',font:{size:10,family:"'Barlow'"},padding:10,boxWidth:10,boxHeight:10}},tooltip:CD().plugins.tooltip}}});
+  pieChartInst = new Chart(document.getElementById('incidentPie'),{type:'doughnut',data:{labels:['Danger','High','Medium','Low'],datasets:[{data:[0,0,0,0],backgroundColor:['#ff3b5c','#ffcc00','#ff6b35','#00ff9d'],borderWidth:0,hoverOffset:6}]},options:{cutout:'65%',plugins:{legend:{display:true,position:'bottom',labels:{color:'#6a8fa5',font:{size:10,family:"'Barlow'"},padding:10,boxWidth:10,boxHeight:10}},tooltip:CD().plugins.tooltip}}});
+  // update pie whenever we get data
+  const origFetch = fetchOverviewData;
 }
+
+function updatePieChart(data) {
+  if (!pieChartInst) return;
+  const counts = [
+    data.filter(c=>c.risk==='danger').length,
+    data.filter(c=>c.risk==='high').length,
+    data.filter(c=>c.risk==='medium').length,
+    data.filter(c=>c.risk==='low').length,
+  ];
+  pieChartInst.data.datasets[0].data = counts;
+  pieChartInst.update('none');
+}
+
+// Hook pie update into fetchOverviewData result
+const _origUpdateOverview = updateOverview;
+function updateOverview() {
+  if (!overviewData.length) return;
+  buildZoneFilterBar(overviewData);
+  const filtered = getFilteredData();
+  updateKPIs(filtered);
+  updateZoneTable(filtered);
+  updateDensityChart(filtered);
+  updateIncidentLog(filtered);
+  updateAlertTicker(filtered);
+  updatePieChart(filtered);
+}
+
 function renderEntryExitChart(){
-  new Chart(document.getElementById('entryExitChart'),{type:'bar',data:{labels:hours,datasets:[{label:'Entry',data:entryData,backgroundColor:'rgba(0,212,255,0.7)',borderWidth:0,borderRadius:2},{label:'Exit',data:exitData,backgroundColor:'rgba(255,59,92,0.6)',borderWidth:0,borderRadius:2}]},options:{...CD(),plugins:{...CD().plugins,legend:{display:true,position:'top',labels:{color:'#6a8fa5',font:{size:9,family:"'Barlow'"},padding:8,boxWidth:8,boxHeight:8}}},scales:{x:{stacked:false,grid:{display:false},ticks:{color:'#3a6070',font:{size:8,family:"'Barlow Condensed'"},maxRotation:45}},y:{grid:{color:'rgba(30,48,64,0.6)'},ticks:{color:'#3a6070',font:{size:9,family:"'Barlow Condensed'"}}}}}}); 
+  entryExitChartInst = new Chart(document.getElementById('entryExitChart'),{type:'bar',data:{labels:hours,datasets:[{label:'Entry',data:entryData,backgroundColor:'rgba(0,212,255,0.7)',borderWidth:0,borderRadius:2},{label:'Exit',data:exitData,backgroundColor:'rgba(255,59,92,0.6)',borderWidth:0,borderRadius:2}]},options:{...CD(),plugins:{...CD().plugins,legend:{display:true,position:'top',labels:{color:'#6a8fa5',font:{size:9,family:"'Barlow'"},padding:8,boxWidth:8,boxHeight:8}}},scales:{x:{stacked:false,grid:{display:false},ticks:{color:'#3a6070',font:{size:8,family:"'Barlow Condensed'"},maxRotation:45}},y:{grid:{color:'rgba(30,48,64,0.6)'},ticks:{color:'#3a6070',font:{size:9,family:"'Barlow Condensed'"}}}}}}); 
 }
+
 </script>
 </body>
 </html>
