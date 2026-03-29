@@ -27,8 +27,13 @@
     --glow2: 0 0 20px rgba(0,255,157,0.25);
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);}
+  html,body{
+    height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Barlow',sans-serif;
+    }
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);}
 
   /* LOGIN */
   #login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:radial-gradient(ellipse 80% 60% at 50% 50%,#0a1f2e 0%,#080c10 70%);position:relative;overflow:hidden;}
@@ -551,6 +556,8 @@
 
 <script>
 /* ═══ CITY DATA ═══ */
+let cities = [];
+/*
 const cities = [
   { id:'tokyo',     name:'Tokyo',      country:'Japan',          crowd:142800, capacity:200000, density:4.2, risk:'high',   trend:'up',   trendRate:'+2,400/hr', trendDesc:'Increasing — peak commute hours',          peak:'187,400', dwell:'1h 48m', cameras:'214/220', img:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80', ytId:'dR40FNNs5s0' },
   { id:'newyork',   name:'New York',   country:'United States',  crowd:98500,  capacity:150000, density:3.8, risk:'medium', trend:'up',   trendRate:'+1,100/hr', trendDesc:'Gradually rising — afternoon surge',       peak:'124,200', dwell:'2h 05m', cameras:'310/320', img:'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&q=80', ytId:'AdUw5RdyZxI' },
@@ -564,7 +571,7 @@ const cities = [
   { id:'singapore', name:'Singapore',  country:'Singapore',      crowd:63200,  capacity:110000, density:2.6, risk:'medium', trend:'up',   trendRate:'+900/hr',   trendDesc:'Slowly rising — lunch hour',               peak:'82,400',  dwell:'2h 15m', cameras:'142/145', img:'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600&q=80', ytId:'UiM8MXpHMDY' },
   { id:'istanbul',  name:'Istanbul',   country:'Turkey',         crowd:91400,  capacity:130000, density:4.1, risk:'medium', trend:'up',   trendRate:'+1,500/hr', trendDesc:'Moderate rise — bazaar district',          peak:'115,000', dwell:'2h 00m', cameras:'162/168', img:'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600&q=80', ytId:'zNMUFmWJeS0' },
   { id:'cairo',     name:'Cairo',      country:'Egypt',          crowd:112700, capacity:140000, density:5.1, risk:'high',   trend:'flat', trendRate:'+200/hr',   trendDesc:'Nearly stable — dense but contained',      peak:'118,300', dwell:'1h 55m', cameras:'104/112', img:'https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?w=600&q=80', ytId:'wdajNEJVPSs' },
-];
+]; */
 
 const riskConfig = {
   low:    { tileCls:'risk-low',    label:'LOW',    capColor:'var(--accent2)', badgeCls:'risk-low'    },
@@ -621,52 +628,56 @@ function switchTab(tab) {
   } else {
     document.getElementById('panel-live').classList.add('active');
     document.getElementById('tab-live').classList.add('active');
-    renderCityGrid();
+    loadCities();
+     if (!window.cityInterval) {
+      window.cityInterval = setInterval(loadCities, 5000);
+     }
   }
 }
 
 /* ═══ CITY GRID ═══ */
 let gridRendered = false;
+function loadCities() {
+  fetch("http://127.0.0.1:8000/cities")
+    .then(res => res.json())
+    .then(data => {
+      cities = data;
+      renderCityGrid();
+    })
+    .catch(err => console.error("Error loading cities:", err));
+}
 function renderCityGrid() {
-  if (gridRendered) return;
-  gridRendered = true;
-  document.getElementById('city-count').textContent = cities.length;
-  const grid = document.getElementById('city-grid');
+  const grid = document.getElementById("city-grid");
+
+  if (!grid) return;
+
   grid.innerHTML = cities.map(city => {
-    const rc = riskConfig[city.risk];
-    const capPct = Math.round(city.crowd / city.capacity * 100);
-    const crowdFmt = city.crowd.toLocaleString();
-    const trendIcon = city.trend === 'up' ? '↑' : city.trend === 'down' ? '↓' : '→';
-    const chipCls = city.trend === 'up' ? 'danger' : city.trend === 'down' ? 'green' : '';
-    const capCls = capPct > 85 ? 'danger' : capPct > 65 ? 'warn' : 'green';
     return `
       <div class="city-tile" onclick="openStream('${city.id}')">
         <div class="city-tile-bg" style="background-image:url('${city.img}')"></div>
         <div class="city-tile-grad"></div>
-        <div class="city-tile-live"><div class="live-dot"></div>LIVE</div>
-        <div class="city-tile-risk ${rc.tileCls}">${rc.label}</div>
+
         <div class="city-tile-always">
           <div class="city-tile-name">${city.name}</div>
           <div class="city-tile-country">${city.country}</div>
         </div>
+
         <div class="city-tile-details">
           <div class="city-detail-chip">
             <div class="chip-label">Crowd</div>
-            <div class="chip-val">${crowdFmt}</div>
+            <div class="chip-val">${city.crowd}</div>
           </div>
           <div class="city-detail-chip">
-            <div class="chip-label">Cap %</div>
-            <div class="chip-val ${capCls}">${capPct}%</div>
-          </div>
-          <div class="city-detail-chip">
-            <div class="chip-label">Trend</div>
-            <div class="chip-val ${chipCls}">${trendIcon} ${city.trend.toUpperCase()}</div>
+            <div class="chip-label">Density</div>
+            <div class="chip-val">${city.density}</div>
           </div>
         </div>
-      </div>`;
-  }).join('');
-}
+      </div>
+    `;
+  }).join("");
 
+  document.getElementById("city-count").textContent = cities.length;
+}
 /* ═══ STREAM ═══ */
 function openStream(cityId) {
   const city = cities.find(c => c.id === cityId);
