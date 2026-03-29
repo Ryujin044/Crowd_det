@@ -28,191 +28,86 @@
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);}
 
-  /* ── SCANLINE OVERLAY ── */
-  body::before{
-    content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
-    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);
-  }
-
-  /* ═══════════════════════════════ LOGIN PAGE ═══════════════════════════════ */
-  #login-page{
-    display:flex;align-items:center;justify-content:center;min-height:100vh;
-    background: radial-gradient(ellipse 80% 60% at 50% 50%, #0a1f2e 0%, #080c10 70%);
-    position:relative;overflow:hidden;
-  }
-  #login-page::after{
-    content:'';position:absolute;inset:0;
-    background: conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(0,212,255,0.03) 60deg, transparent 120deg);
-    animation: spinbg 20s linear infinite;
-  }
+  /* LOGIN */
+  #login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:radial-gradient(ellipse 80% 60% at 50% 50%,#0a1f2e 0%,#080c10 70%);position:relative;overflow:hidden;}
+  #login-page::after{content:'';position:absolute;inset:0;background:conic-gradient(from 180deg at 50% 50%,transparent 0deg,rgba(0,212,255,0.03) 60deg,transparent 120deg);animation:spinbg 20s linear infinite;}
   @keyframes spinbg{to{transform:rotate(360deg);}}
-
-  .grid-bg{
-    position:absolute;inset:0;
-    background-image: linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at center, black 0%, transparent 70%);
-  }
-
-  .login-box{
-    position:relative;z-index:2;
-    width:420px;padding:48px 44px;
-    background:var(--panel);
-    border:1px solid var(--border2);
-    box-shadow: 0 0 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(0,212,255,0.1), var(--glow);
-    animation: fadein 0.6s ease;
-  }
+  .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at center,black 0%,transparent 70%);}
+  .login-box{position:relative;z-index:2;width:420px;padding:48px 44px;background:var(--panel);border:1px solid var(--border2);box-shadow:0 0 60px rgba(0,0,0,0.6),inset 0 1px 0 rgba(0,212,255,0.1),var(--glow);animation:fadein 0.6s ease;}
   @keyframes fadein{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
-
-  .login-logo{
-    display:flex;align-items:center;gap:12px;margin-bottom:8px;
-  }
-  .login-logo-icon{
-    width:40px;height:40px;border:2px solid var(--accent);
-    display:flex;align-items:center;justify-content:center;
-    position:relative;
-  }
-  .login-logo-icon::before{
-    content:'';position:absolute;inset:-4px;border:1px solid rgba(0,212,255,0.2);
-  }
+  .login-logo{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .login-logo-icon{width:40px;height:40px;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;position:relative;}
+  .login-logo-icon::before{content:'';position:absolute;inset:-4px;border:1px solid rgba(0,212,255,0.2);}
   .login-logo-icon svg{width:22px;height:22px;fill:var(--accent);}
   .login-brand{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;letter-spacing:3px;color:var(--white);}
   .login-brand span{color:var(--accent);}
   .login-sub{font-size:11px;letter-spacing:4px;color:var(--text3);text-transform:uppercase;margin-bottom:36px;margin-left:52px;}
-  .login-title{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--text2);margin-bottom:28px;
-    display:flex;align-items:center;gap:10px;}
-  .login-title::before{content:'';flex:1;height:1px;background:var(--border);}
-  .login-title::after{content:'';flex:1;height:1px;background:var(--border);}
-
+  .login-title{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--text2);margin-bottom:28px;display:flex;align-items:center;gap:10px;}
+  .login-title::before,.login-title::after{content:'';flex:1;height:1px;background:var(--border);}
   .field{margin-bottom:20px;}
   .field label{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:8px;}
-  .field input{
-    width:100%;padding:12px 14px;
-    background:rgba(0,212,255,0.04);
-    border:1px solid var(--border2);
-    color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;
-    outline:none;transition:border-color 0.2s, box-shadow 0.2s;
-  }
+  .field input{width:100%;padding:12px 14px;background:rgba(0,212,255,0.04);border:1px solid var(--border2);color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
   .field input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,212,255,0.1);}
   .field input::placeholder{color:var(--text3);}
-
-  .login-btn{
-    width:100%;padding:14px;margin-top:8px;
-    background:var(--accent);color:#080c10;
-    font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;
-    letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;
-    transition:background 0.2s, box-shadow 0.2s;
-    position:relative;overflow:hidden;
-  }
+  .login-btn{width:100%;padding:14px;margin-top:8px;background:var(--accent);color:#080c10;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.2s,box-shadow 0.2s;position:relative;overflow:hidden;}
   .login-btn:hover{background:#33ddff;box-shadow:var(--glow);}
   .login-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transform:translateX(-100%);transition:transform 0.4s;}
   .login-btn:hover::after{transform:translateX(100%);}
-
-  .login-error{
-    display:none;margin-top:14px;padding:10px 14px;
-    background:rgba(255,59,92,0.1);border-left:3px solid var(--danger);
-    font-size:12px;color:var(--danger);letter-spacing:1px;
-  }
+  .login-error{display:none;margin-top:14px;padding:10px 14px;background:rgba(255,59,92,0.1);border-left:3px solid var(--danger);font-size:12px;color:var(--danger);letter-spacing:1px;}
   .login-hint{margin-top:18px;font-size:11px;color:var(--text3);text-align:center;}
   .login-hint span{color:var(--text2);}
 
-  /* ═══════════════════════════════ DASHBOARD ═══════════════════════════════ */
+  /* DASHBOARD */
   #dashboard-page{display:none;flex-direction:column;min-height:100vh;}
-
-  /* ── HEADER ── */
-  .header{
-    display:flex;align-items:center;gap:0;
-    background:var(--bg2);border-bottom:1px solid var(--border);
-    padding:0 24px;height:58px;position:sticky;top:0;z-index:100;
-  }
+  .header{display:flex;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;height:58px;position:sticky;top:0;z-index:100;}
   .h-logo{display:flex;align-items:center;gap:10px;padding-right:24px;border-right:1px solid var(--border);}
   .h-logo-icon{width:30px;height:30px;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;}
   .h-logo-icon svg{width:16px;height:16px;fill:var(--accent);}
   .h-brand{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:3px;color:var(--white);}
   .h-brand span{color:var(--accent);}
-
-  .h-nav{display:flex;align-items:stretch;height:100%;margin-left:0;gap:0;}
-  .h-nav a{
-    display:flex;align-items:center;gap:7px;padding:0 18px;
-    font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
-    color:var(--text2);text-decoration:none;border-bottom:2px solid transparent;
-    transition:color 0.2s,border-color 0.2s;cursor:pointer;
-  }
+  .h-nav{display:flex;align-items:stretch;height:100%;margin-left:0;}
+  .h-nav a{display:flex;align-items:center;gap:7px;padding:0 18px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text2);text-decoration:none;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;cursor:pointer;}
   .h-nav a.active,.h-nav a:hover{color:var(--accent);border-color:var(--accent);}
   .h-nav a svg{width:13px;height:13px;fill:currentColor;}
-
   .h-right{margin-left:auto;display:flex;align-items:center;gap:16px;}
   .h-time{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--accent2);}
   .h-status{display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:1px;color:var(--text2);}
   .h-dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse2 2s infinite;}
   @keyframes pulse2{0%,100%{box-shadow:0 0 0 0 rgba(0,255,157,0.5);}50%{box-shadow:0 0 0 6px rgba(0,255,157,0);}}
-  .h-user{
-    display:flex;align-items:center;gap:8px;padding:6px 12px;
-    border:1px solid var(--border);cursor:pointer;font-size:12px;color:var(--text);
-  }
+  .h-user{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--border);cursor:pointer;font-size:12px;color:var(--text);}
   .h-user svg{width:14px;height:14px;fill:var(--text2);}
-  .h-logout{
-    padding:6px 14px;border:1px solid var(--danger);background:transparent;
-    color:var(--danger);font-family:'Barlow Condensed',sans-serif;font-size:11px;
-    font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;
-    transition:background 0.2s;
-  }
+  .h-logout{padding:6px 14px;border:1px solid var(--danger);background:transparent;color:var(--danger);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
   .h-logout:hover{background:rgba(255,59,92,0.1);}
 
-  /* ── ALERT TICKER ── */
-  .alert-bar{
-    background:rgba(255,204,0,0.08);border-bottom:1px solid rgba(255,204,0,0.2);
-    padding:7px 24px;display:flex;align-items:center;gap:12px;overflow:hidden;
-  }
-  .alert-label{
-    font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;
-    letter-spacing:2px;color:var(--warn);white-space:nowrap;
-    display:flex;align-items:center;gap:6px;
-  }
+  /* ALERT TICKER */
+  .alert-bar{background:rgba(255,204,0,0.08);border-bottom:1px solid rgba(255,204,0,0.2);padding:7px 24px;display:flex;align-items:center;gap:12px;overflow:hidden;}
+  .alert-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--warn);white-space:nowrap;display:flex;align-items:center;gap:6px;}
   .alert-label svg{width:13px;height:13px;fill:var(--warn);animation:blink 1.2s step-end infinite;}
   @keyframes blink{50%{opacity:0;}}
   .ticker-wrap{flex:1;overflow:hidden;}
-  .ticker{
-    display:inline-flex;gap:60px;white-space:nowrap;
-    animation:ticker 30s linear infinite;
-    font-size:11px;letter-spacing:1px;color:var(--text2);
-  }
+  .ticker{display:inline-flex;gap:60px;white-space:nowrap;animation:ticker 30s linear infinite;font-size:11px;letter-spacing:1px;color:var(--text2);}
   .ticker span{color:var(--warn);}
   @keyframes ticker{from{transform:translateX(100vw);}to{transform:translateX(-100%);}}
 
-  /* ── MAIN ── */
-  .main{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:18px;}
+  /* TAB PANELS */
+  .tab-panel{display:none;flex:1;flex-direction:column;}
+  .tab-panel.active{display:flex;}
 
-  /* ── ZONE SELECTOR ── */
+  /* OVERVIEW */
+  .main{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:18px;}
   .zone-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .zone-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-right:4px;}
-  .zone-btn{
-    padding:6px 14px;border:1px solid var(--border2);background:transparent;
-    font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;
-    letter-spacing:2px;text-transform:uppercase;color:var(--text2);cursor:pointer;
-    transition:all 0.15s;
-  }
+  .zone-btn{padding:6px 14px;border:1px solid var(--border2);background:transparent;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text2);cursor:pointer;transition:all 0.15s;}
   .zone-btn.active,.zone-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.07);}
-
-  /* ── KPI GRID ── */
   .kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
   @media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(3,1fr);}}
-
-  .kpi-card{
-    background:var(--panel);border:1px solid var(--border);
-    padding:16px 18px;position:relative;overflow:hidden;
-    transition:border-color 0.2s;
-  }
-  .kpi-card::before{
-    content:'';position:absolute;top:0;left:0;right:0;height:2px;
-    background:linear-gradient(90deg, var(--accent), transparent);
-  }
-  .kpi-card.warn::before{background:linear-gradient(90deg, var(--warn), transparent);}
-  .kpi-card.danger::before{background:linear-gradient(90deg, var(--danger), transparent);}
-  .kpi-card.green::before{background:linear-gradient(90deg, var(--accent2), transparent);}
-  .kpi-card:hover{border-color:var(--border2);}
+  .kpi-card{background:var(--panel);border:1px solid var(--border);padding:16px 18px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+  .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
+  .kpi-card.warn::before{background:linear-gradient(90deg,var(--warn),transparent);}
+  .kpi-card.danger::before{background:linear-gradient(90deg,var(--danger),transparent);}
+  .kpi-card.green::before{background:linear-gradient(90deg,var(--accent2),transparent);}
   .kpi-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
   .kpi-label svg{width:11px;height:11px;fill:currentColor;}
   .kpi-val{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:700;line-height:1;color:var(--white);}
@@ -223,29 +118,16 @@
   .kpi-change.down{color:var(--danger);}
   .kpi-change.neutral{color:var(--text2);}
   .kpi-sub{margin-top:6px;font-size:11px;color:var(--text3);}
-
-  /* capacity bar */
-  .cap-bar{margin-top:8px;height:4px;background:var(--border);position:relative;}
-  .cap-fill{height:100%;transition:width 0.5s;position:relative;}
-  .cap-fill::after{content:'';position:absolute;right:0;top:-2px;width:2px;height:8px;background:inherit;}
-
-  /* ── CHARTS ROW ── */
+  .cap-bar{margin-top:8px;height:4px;background:var(--border);}
+  .cap-fill{height:100%;transition:width 0.5s;}
   .charts-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;}
-  @media(max-width:1200px){.charts-row{grid-template-columns:1fr 1fr;}}
-
   .chart-card{background:var(--panel);border:1px solid var(--border);padding:18px 20px;}
   .chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
   .chart-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--white);}
   .chart-badge{font-size:10px;padding:3px 8px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);color:var(--accent);letter-spacing:1px;}
   .chart-badge.live{background:rgba(0,255,157,0.1);border-color:rgba(0,255,157,0.2);color:var(--accent2);}
   .chart-badge.warn{background:rgba(255,204,0,0.1);border-color:rgba(255,204,0,0.2);color:var(--warn);}
-  .chart-wrap{position:relative;}
-
-  /* ── BOTTOM ROW ── */
   .bottom-row{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:12px;}
-  @media(max-width:1200px){.bottom-row{grid-template-columns:1fr 1fr;}}
-
-  /* ── ZONE TABLE ── */
   .table-wrap{overflow-x:auto;}
   table{width:100%;border-collapse:collapse;font-size:12px;}
   thead tr{border-bottom:1px solid var(--border2);}
@@ -254,27 +136,16 @@
   tbody tr:hover{background:rgba(0,212,255,0.03);}
   tbody td{padding:10px 12px;color:var(--text);}
   .td-zone{font-weight:600;color:var(--white);}
-  .status-pill{
-    display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;
-    letter-spacing:1px;text-transform:uppercase;border-radius:2px;
-  }
+  .status-pill{display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;}
   .pill-ok{background:rgba(0,255,157,0.12);color:var(--accent2);}
   .pill-warn{background:rgba(255,204,0,0.12);color:var(--warn);}
   .pill-crit{background:rgba(255,59,92,0.12);color:var(--danger);}
-  .density-bar{height:6px;background:var(--border);position:relative;min-width:80px;}
+  .density-bar{height:6px;background:var(--border);min-width:80px;}
   .density-fill{height:100%;}
-
-  /* ── INCIDENT LOG ── */
-  .incident-list{display:flex;flex-direction:column;gap:0;}
-  .incident{
-    display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);
-    align-items:flex-start;
-  }
+  .incident-list{display:flex;flex-direction:column;}
+  .incident{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
   .incident:last-child{border-bottom:none;}
-  .inc-icon{
-    width:28px;height:28px;flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;border:1px solid;
-  }
+  .inc-icon{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid;}
   .inc-icon svg{width:13px;height:13px;fill:currentColor;}
   .inc-icon.crit{border-color:var(--danger);color:var(--danger);background:rgba(255,59,92,0.06);}
   .inc-icon.warn{border-color:var(--warn);color:var(--warn);background:rgba(255,204,0,0.06);}
@@ -283,42 +154,200 @@
   .inc-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px;}
   .inc-meta{font-size:11px;color:var(--text2);}
   .inc-time{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);white-space:nowrap;}
-
-  /* ── HEATMAP ── */
-  .heatmap-grid{
-    display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(5,1fr);
-    gap:3px;aspect-ratio:8/5;
-  }
-  .hm-cell{
-    border-radius:2px;transition:transform 0.2s;cursor:default;
-    position:relative;
-  }
+  .heatmap-grid{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(5,1fr);gap:3px;aspect-ratio:8/5;}
+  .hm-cell{border-radius:2px;transition:transform 0.2s;cursor:default;position:relative;}
   .hm-cell:hover{transform:scale(1.08);z-index:2;}
-  .hm-cell[data-tip]:hover::after{
-    content:attr(data-tip);position:absolute;bottom:110%;left:50%;transform:translateX(-50%);
-    background:var(--bg);border:1px solid var(--border2);padding:4px 8px;
-    font-size:10px;color:var(--white);white-space:nowrap;z-index:10;pointer-events:none;
-  }
+  .hm-cell[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:110%;left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--border2);padding:4px 8px;font-size:10px;color:var(--white);white-space:nowrap;z-index:10;pointer-events:none;}
   .hm-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--text3);letter-spacing:1px;}
-
-  /* ── FOOTER ── */
-  .footer{
-    padding:10px 24px;border-top:1px solid var(--border);
-    display:flex;align-items:center;justify-content:space-between;
-    font-size:11px;color:var(--text3);
-  }
+  .footer{padding:10px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text3);}
   .footer-left{display:flex;align-items:center;gap:20px;}
   .footer-dot{width:6px;height:6px;border-radius:50%;}
 
-  /* scrollbar */
-  ::-webkit-scrollbar{width:6px;height:6px;}
+  /* ═══ LIVE MONITORING TAB ═══ */
+  #panel-live { background: var(--bg); overflow: hidden; }
+
+  #city-grid-view { padding: 24px; flex: 1; overflow-y: auto; }
+
+  .lm-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;
+  }
+  .lm-title {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--white);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .lm-title::before { content: ''; width: 3px; height: 18px; background: var(--accent); }
+  .lm-count { font-size: 11px; letter-spacing: 2px; color: var(--text2); }
+  .lm-count span { color: var(--accent); font-family: 'Share Tech Mono', monospace; }
+
+  /* CITY GRID */
+  .city-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
+  }
+
+  .city-tile {
+    position: relative; height: 192px; overflow: hidden; cursor: pointer;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s, transform 0.35s cubic-bezier(0.23,1,0.32,1), box-shadow 0.35s, z-index 0s;
+  }
+  .city-tile:hover {
+    border-color: var(--accent); transform: scale(1.045);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,212,255,0.25), var(--glow);
+    z-index: 5;
+  }
+  .city-tile-bg {
+    position: absolute; inset: 0; background-size: cover; background-position: center;
+    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), filter 0.4s;
+    filter: brightness(0.42) saturate(0.65);
+  }
+  .city-tile:hover .city-tile-bg { transform: scale(1.09); filter: brightness(0.52) saturate(0.85); }
+  .city-tile::before {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+  }
+  .city-tile-grad {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(to top, rgba(8,12,16,0.96) 0%, rgba(8,12,16,0.35) 50%, transparent 100%);
+    transition: background 0.4s;
+  }
+  .city-tile:hover .city-tile-grad {
+    background: linear-gradient(to top, rgba(8,12,16,0.98) 0%, rgba(8,12,16,0.58) 55%, rgba(0,212,255,0.04) 100%);
+  }
+
+  /* top-left LIVE tag */
+  .city-tile-live {
+    position: absolute; top: 10px; left: 10px; z-index: 4;
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(8,12,16,0.78); border: 1px solid rgba(0,255,157,0.35);
+    padding: 3px 8px; font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); text-transform: uppercase;
+    opacity: 0; transform: translateY(-4px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .city-tile-live .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent2); animation: pulse2 2s infinite; }
+  .city-tile:hover .city-tile-live { opacity: 1; transform: translateY(0); }
+
+  /* top-right risk badge */
+  .city-tile-risk {
+    position: absolute; top: 10px; right: 10px; z-index: 4;
+    padding: 3px 9px; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid;
+  }
+  .risk-low    { background: rgba(0,255,157,0.1); border-color: rgba(0,255,157,0.4); color: var(--accent2); }
+  .risk-medium { background: rgba(255,204,0,0.1);  border-color: rgba(255,204,0,0.4);  color: var(--warn); }
+  .risk-high   { background: rgba(255,107,53,0.1); border-color: rgba(255,107,53,0.4); color: var(--accent3); }
+  .risk-danger { background: rgba(255,59,92,0.1);  border-color: rgba(255,59,92,0.4);  color: var(--danger); }
+
+  /* always-visible name area */
+  .city-tile-always {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+    padding: 14px 14px 12px;
+    transition: padding-bottom 0.3s;
+  }
+  .city-tile:hover .city-tile-always { padding-bottom: 66px; }
+  .city-tile-name { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 2px; color: var(--white); line-height: 1; margin-bottom: 3px; }
+  .city-tile-country { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); }
+
+  /* hover-reveal details */
+  .city-tile-details {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+    padding: 0 10px 10px; display: flex; gap: 8px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.3s 0.04s, transform 0.3s 0.04s;
+    pointer-events: none;
+  }
+  .city-tile:hover .city-tile-details { opacity: 1; transform: translateY(0); }
+  .city-detail-chip { display: flex; flex-direction: column; gap: 2px; flex: 1; background: rgba(8,20,30,0.82); border: 1px solid rgba(0,212,255,0.18); padding: 5px 7px; }
+  .chip-label { font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); }
+  .chip-val { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--accent); line-height: 1.1; }
+  .chip-val.green  { color: var(--accent2); }
+  .chip-val.warn   { color: var(--warn); }
+  .chip-val.danger { color: var(--danger); }
+
+  /* ── STREAM VIEW ── */
+  #stream-view { display: none; flex: 1; flex-direction: row; min-height: 0; }
+  #stream-view.visible { display: flex; }
+
+  .stream-left { flex: 1; display: flex; flex-direction: column; background: #000; min-width: 0; }
+  .stream-topbar {
+    display: flex; align-items: center; gap: 12px; padding: 11px 16px;
+    background: var(--bg2); border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .stream-back-btn {
+    display: flex; align-items: center; gap: 6px; padding: 6px 12px;
+    border: 1px solid var(--border2); background: transparent; color: var(--text2);
+    font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+  }
+  .stream-back-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .stream-back-btn svg { width: 12px; height: 12px; fill: currentColor; }
+  .stream-city-label { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--white); }
+  .stream-city-label span { color: var(--text2); }
+  .stream-live-badge {
+    display: flex; align-items: center; gap: 5px; margin-left: auto;
+    background: rgba(255,59,92,0.14); border: 1px solid rgba(255,59,92,0.4);
+    padding: 3px 10px; font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--danger);
+  }
+  .stream-live-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--danger); animation: pulse2 1s infinite; }
+  .stream-embed { flex: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center; min-height: 0; }
+  .stream-embed iframe { width: 100%; height: 100%; border: none; }
+  .stream-placeholder { display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text3); }
+  .stream-placeholder svg { width: 48px; height: 48px; fill: var(--text3); }
+  .stream-placeholder p { font-size: 13px; letter-spacing: 1px; }
+
+  /* RIGHT PANEL */
+  .stream-right {
+    width: 296px; min-width: 280px; flex-shrink: 0;
+    background: var(--panel); border-left: 1px solid var(--border);
+    display: flex; flex-direction: column; overflow-y: auto;
+  }
+  .panel-city-header {
+    padding: 20px 20px 16px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden;
+  }
+  .panel-city-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); }
+  .panel-city-name { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--white); line-height: 1; margin-bottom: 4px; }
+  .panel-city-country { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); }
+  .panel-risk-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+  .panel-risk-badge { padding: 4px 12px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; }
+
+  .panel-stats { padding: 18px 20px 14px; display: flex; flex-direction: column; gap: 14px; border-bottom: 1px solid var(--border); }
+  .panel-stat-label { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text3); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .panel-stat-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .panel-stat-value { font-family: 'Barlow Condensed', sans-serif; font-size: 38px; font-weight: 700; line-height: 1; color: var(--white); }
+  .panel-stat-unit { font-size: 13px; font-weight: 400; color: var(--text2); margin-left: 4px; }
+  .panel-stat-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+  .panel-cap-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 7px; display: flex; align-items: center; justify-content: space-between; }
+  .panel-cap-pct { font-family: 'Share Tech Mono', monospace; font-size: 12px; }
+  .panel-cap-bar { height: 5px; background: var(--border); }
+  .panel-cap-fill { height: 100%; transition: width 1s; }
+
+  .panel-trend { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  .trend-section-label { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+  .trend-row { display: flex; align-items: center; gap: 12px; }
+  .trend-arrow { font-size: 32px; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; line-height: 1; }
+  .trend-arrow.up   { color: var(--danger); }
+  .trend-arrow.down { color: var(--accent2); }
+  .trend-arrow.flat { color: var(--text2); }
+  .trend-info { display: flex; flex-direction: column; gap: 4px; }
+  .trend-rate { font-family: 'Share Tech Mono', monospace; font-size: 17px; color: var(--white); }
+  .trend-rate.up   { color: var(--danger); }
+  .trend-rate.down { color: var(--accent2); }
+  .trend-desc { font-size: 11px; color: var(--text2); line-height: 1.4; }
+
+  .panel-meta { padding: 14px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .meta-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: rgba(0,212,255,0.03); border: 1px solid var(--border); }
+  .meta-key { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); }
+  .meta-val { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--text); }
+
+  ::-webkit-scrollbar{width:5px;height:5px;}
   ::-webkit-scrollbar-track{background:var(--bg);}
   ::-webkit-scrollbar-thumb{background:var(--border2);}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════ LOGIN PAGE ═══════════════════════════════ -->
+<!-- LOGIN -->
 <div id="login-page">
   <div class="grid-bg"></div>
   <div class="login-box">
@@ -330,66 +359,42 @@
     </div>
     <div class="login-sub">Intelligent Crowd Monitoring</div>
     <div class="login-title">Operator Access</div>
-    <div class="field">
-      <label>Username</label>
-      <input type="text" id="username" placeholder="Enter username" autocomplete="off"/>
-    </div>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" id="password" placeholder="Enter password"/>
-    </div>
+    <div class="field"><label>Username</label><input type="text" id="username" placeholder="Enter username" autocomplete="off"/></div>
+    <div class="field"><label>Password</label><input type="password" id="password" placeholder="Enter password"/></div>
     <button class="login-btn" onclick="doLogin()">Authenticate</button>
     <div class="login-error" id="login-error">⚠ Invalid credentials. Access denied.</div>
     <div class="login-hint">Default: <span>admin</span> / <span>crowd@2025</span></div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════ DASHBOARD PAGE ═══════════════════════════════ -->
+<!-- DASHBOARD -->
 <div id="dashboard-page">
-
-  <!-- HEADER -->
   <header class="header">
     <div class="h-logo">
-      <div class="h-logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-      </div>
+      <div class="h-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
       <div class="h-brand">CROWD<span>SENSE</span></div>
     </div>
     <nav class="h-nav" style="margin-left:20px;">
-      <a class="active">
-        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-        Overview
+      <a id="tab-overview" class="active" onclick="switchTab('overview')">
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>Overview
       </a>
-      <a>
-        <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
-        Analytics
+      <a id="tab-live" onclick="switchTab('live')">
+        <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>Live Monitoring
       </a>
-      <a>
-        <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-        Alerts
-      </a>
-      <a>
-        <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-        Settings
-      </a>
+      <a><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>Analytics</a>
+      <a><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>Alerts</a>
+      <a><svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>Settings</a>
     </nav>
     <div class="h-right">
       <div class="h-time" id="clock">--:--:--</div>
       <div class="h-status"><div class="h-dot"></div> LIVE FEED</div>
-      <div class="h-user">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        admin
-      </div>
+      <div class="h-user"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>admin</div>
       <button class="h-logout" onclick="doLogout()">Logout</button>
     </div>
   </header>
 
-  <!-- ALERT TICKER -->
   <div class="alert-bar">
-    <div class="alert-label">
-      <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-      ALERTS
-    </div>
+    <div class="alert-label"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>ALERTS</div>
     <div class="ticker-wrap">
       <div class="ticker">
         <span>⚠ GATE-C:</span> Crowd density exceeds 85% capacity — monitor closely &nbsp;|&nbsp;
@@ -402,169 +407,174 @@
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <main class="main">
+  <!-- OVERVIEW TAB -->
+  <div class="tab-panel active" id="panel-overview">
+    <main class="main">
+      <div class="zone-bar">
+        <span class="zone-label">Zone</span>
+        <button class="zone-btn active">All Zones</button>
+        <button class="zone-btn">Gate A</button>
+        <button class="zone-btn">Gate B</button>
+        <button class="zone-btn">Gate C</button>
+        <button class="zone-btn">Main Stage</button>
+        <button class="zone-btn">Food Court</button>
+        <button class="zone-btn">Parking</button>
+        <button class="zone-btn">VIP</button>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card warn">
+          <div class="kpi-label"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Total Crowd</div>
+          <div class="kpi-val">24,381</div><div class="cap-bar"><div class="cap-fill" style="width:81%;background:var(--warn);"></div></div>
+          <div class="kpi-change up">↑ +1,240 last 30 min</div><div class="kpi-sub">Capacity: 30,000</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Avg Density</div><div class="kpi-val">3.2<span class="kpi-unit">p/m²</span></div>
+          <div class="cap-bar"><div class="cap-fill" style="width:53%;background:var(--accent2);"></div></div>
+          <div class="kpi-change neutral">→ Moderate</div><div class="kpi-sub">Safe limit: 6 p/m²</div>
+        </div>
+        <div class="kpi-card danger">
+          <div class="kpi-label">Critical Zones</div><div class="kpi-val" style="color:var(--danger);">3</div>
+          <div class="kpi-change down">↑ +2 since 14:00</div><div class="kpi-sub">Gate-C · Zone-7 · P3</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Entry Rate</div><div class="kpi-val big">1,840<span class="kpi-unit">/hr</span></div>
+          <div class="kpi-change up">↑ Peak period active</div><div class="kpi-sub">Exit: 620/hr</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Avg Dwell Time</div><div class="kpi-val big">2<span class="kpi-unit">h 14m</span></div>
+          <div class="kpi-change down">↓ −12 min vs. yesterday</div><div class="kpi-sub">Target: 2–3 hrs</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Active Cameras</div><div class="kpi-val" style="color:var(--accent2);">48<span class="kpi-unit">/52</span></div>
+          <div class="kpi-change neutral">4 offline · maintenance</div><div class="kpi-sub">99.1% uptime today</div>
+        </div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card"><div class="chart-header"><div class="chart-title">Crowd Flow — Today</div><div class="chart-badge live">● LIVE</div></div><canvas id="flowChart" height="100"></canvas></div>
+        <div class="chart-card"><div class="chart-header"><div class="chart-title">Zone Density</div><div class="chart-badge warn">⚠ 3 CRITICAL</div></div><canvas id="densityChart" height="180"></canvas></div>
+        <div class="chart-card"><div class="chart-header"><div class="chart-title">Incident Types</div><div class="chart-badge">Today</div></div><canvas id="incidentPie" height="180"></canvas></div>
+      </div>
+      <div class="bottom-row">
+        <div class="chart-card">
+          <div class="chart-header"><div class="chart-title">Zone Status</div><div class="chart-badge live">● LIVE</div></div>
+          <div class="table-wrap"><table><thead><tr><th>Zone</th><th>Count</th><th>Cap%</th><th>Density</th><th>Status</th></tr></thead><tbody id="zone-table-body"></tbody></table></div>
+        </div>
+        <div class="chart-card"><div class="chart-header"><div class="chart-title">Incident Log</div><div class="chart-badge warn">12 Today</div></div><div class="incident-list" id="incident-log"></div></div>
+        <div class="chart-card">
+          <div class="chart-header"><div class="chart-title">Density Heatmap</div><div class="chart-badge">Venue Overview</div></div>
+          <div id="heatmap" class="heatmap-grid"></div>
+          <div class="hm-labels"><span>W</span><span>→ EAST WING →</span><span>E</span></div>
+          <div style="margin-top:10px;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text3);"><span>Low</span><div style="flex:1;height:6px;background:linear-gradient(90deg,#0d2a1a,#00ff9d,#ffcc00,#ff3b5c);border-radius:2px;"></div><span>Critical</span></div>
+          <div style="margin-top:14px;"><div class="chart-header" style="margin-bottom:10px;"><div class="chart-title" style="font-size:11px;">Hourly Entry vs Exit</div></div><canvas id="entryExitChart" height="90"></canvas></div>
+        </div>
+      </div>
+    </main>
+  </div>
 
-    <!-- ZONE FILTER -->
-    <div class="zone-bar">
-      <span class="zone-label">Zone</span>
-      <button class="zone-btn active">All Zones</button>
-      <button class="zone-btn">Gate A</button>
-      <button class="zone-btn">Gate B</button>
-      <button class="zone-btn">Gate C</button>
-      <button class="zone-btn">Main Stage</button>
-      <button class="zone-btn">Food Court</button>
-      <button class="zone-btn">Parking</button>
-      <button class="zone-btn">VIP</button>
+  <!-- LIVE MONITORING TAB -->
+  <div class="tab-panel" id="panel-live">
+    <!-- City grid -->
+    <div id="city-grid-view">
+      <div class="lm-header">
+        <div class="lm-title">Global Live Monitoring</div>
+        <div class="lm-count">Tracking <span id="city-count">12</span> Cities Worldwide</div>
+      </div>
+      <div class="city-grid" id="city-grid"></div>
     </div>
-
-    <!-- KPI CARDS -->
-    <div class="kpi-grid">
-      <div class="kpi-card warn">
-        <div class="kpi-label">
-          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-          Total Crowd
+    <!-- Stream view -->
+    <div id="stream-view">
+      <div class="stream-left">
+        <div class="stream-topbar">
+          <button class="stream-back-btn" onclick="closeStream()">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            Back to Cities
+          </button>
+          <div class="stream-city-label" id="stream-city-label">—</div>
+          <div class="stream-live-badge"><div class="dot"></div> LIVE</div>
         </div>
-        <div class="kpi-val">24,381</div>
-        <div class="cap-bar"><div class="cap-fill" style="width:81%;background:var(--warn);"></div></div>
-        <div class="kpi-change up">↑ +1,240 last 30 min</div>
-        <div class="kpi-sub">Capacity: 30,000</div>
-      </div>
-      <div class="kpi-card green">
-        <div class="kpi-label">Avg Density</div>
-        <div class="kpi-val">3.2<span class="kpi-unit">p/m²</span></div>
-        <div class="cap-bar"><div class="cap-fill" style="width:53%;background:var(--accent2);"></div></div>
-        <div class="kpi-change neutral">→ Moderate</div>
-        <div class="kpi-sub">Safe limit: 6 p/m²</div>
-      </div>
-      <div class="kpi-card danger">
-        <div class="kpi-label">Critical Zones</div>
-        <div class="kpi-val" style="color:var(--danger);">3</div>
-        <div class="kpi-change down">↑ +2 since 14:00</div>
-        <div class="kpi-sub">Gate-C · Zone-7 · P3</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Entry Rate</div>
-        <div class="kpi-val big">1,840<span class="kpi-unit">/hr</span></div>
-        <div class="kpi-change up">↑ Peak period active</div>
-        <div class="kpi-sub">Exit: 620/hr</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Avg Dwell Time</div>
-        <div class="kpi-val big">2<span class="kpi-unit">h 14m</span></div>
-        <div class="kpi-change down">↓ −12 min vs. yesterday</div>
-        <div class="kpi-sub">Target: 2–3 hrs</div>
-      </div>
-      <div class="kpi-card green">
-        <div class="kpi-label">Active Cameras</div>
-        <div class="kpi-val" style="color:var(--accent2);">48<span class="kpi-unit">/52</span></div>
-        <div class="kpi-change neutral">4 offline · maintenance</div>
-        <div class="kpi-sub">99.1% uptime today</div>
-      </div>
-    </div>
-
-    <!-- CHARTS ROW -->
-    <div class="charts-row">
-      <!-- Crowd Flow -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Crowd Flow — Today</div>
-          <div class="chart-badge live">● LIVE</div>
-        </div>
-        <div class="chart-wrap"><canvas id="flowChart" height="100"></canvas></div>
-      </div>
-      <!-- Zone Density -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Zone Density</div>
-          <div class="chart-badge warn">⚠ 3 CRITICAL</div>
-        </div>
-        <div class="chart-wrap"><canvas id="densityChart" height="180"></canvas></div>
-      </div>
-      <!-- Incident Types -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Incident Types</div>
-          <div class="chart-badge">Today</div>
-        </div>
-        <div class="chart-wrap"><canvas id="incidentPie" height="180"></canvas></div>
-      </div>
-    </div>
-
-    <!-- BOTTOM ROW -->
-    <div class="bottom-row">
-
-      <!-- Zone Table -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Zone Status</div>
-          <div class="chart-badge live">● LIVE</div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Zone</th><th>Count</th><th>Cap%</th><th>Density</th><th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="zone-table-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Incident Log -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Incident Log</div>
-          <div class="chart-badge warn">12 Today</div>
-        </div>
-        <div class="incident-list" id="incident-log"></div>
-      </div>
-
-      <!-- Heatmap -->
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Density Heatmap</div>
-          <div class="chart-badge">Venue Overview</div>
-        </div>
-        <div id="heatmap" class="heatmap-grid"></div>
-        <div class="hm-labels">
-          <span>W</span><span>→ EAST WING →</span><span>E</span>
-        </div>
-        <div style="margin-top:10px;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text3);">
-          <span>Low</span>
-          <div style="flex:1;height:6px;background:linear-gradient(90deg,#0d2a1a,#00ff9d,#ffcc00,#ff3b5c);border-radius:2px;"></div>
-          <span>Critical</span>
-        </div>
-
-        <!-- Hourly entry/exit bar chart -->
-        <div style="margin-top:14px;">
-          <div class="chart-header" style="margin-bottom:10px;">
-            <div class="chart-title" style="font-size:11px;">Hourly Entry vs Exit</div>
+        <div class="stream-embed" id="stream-embed">
+          <div class="stream-placeholder" id="stream-placeholder">
+            <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            <p>Loading stream…</p>
           </div>
-          <canvas id="entryExitChart" height="90"></canvas>
         </div>
       </div>
-
+      <div class="stream-right">
+        <div class="panel-city-header">
+          <div class="panel-city-name" id="panel-name">—</div>
+          <div class="panel-city-country" id="panel-country">—</div>
+          <div class="panel-risk-row"><div class="panel-risk-badge" id="panel-risk-badge">—</div></div>
+        </div>
+        <div class="panel-stats">
+          <div>
+            <div class="panel-stat-label">Current Crowd Count</div>
+            <div class="panel-stat-value" id="panel-crowd">—<span class="panel-stat-unit">people</span></div>
+            <div class="panel-stat-sub" id="panel-crowd-sub">—</div>
+          </div>
+          <div>
+            <div class="panel-cap-label">
+              <span>Capacity Utilisation</span>
+              <span class="panel-cap-pct" id="panel-cap-pct">—</span>
+            </div>
+            <div class="panel-cap-bar"><div class="panel-cap-fill" id="panel-cap-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="panel-trend">
+          <div class="trend-section-label">Crowd Trend</div>
+          <div class="trend-row">
+            <div class="trend-arrow" id="trend-arrow">→</div>
+            <div class="trend-info">
+              <div class="trend-rate" id="trend-rate">—</div>
+              <div class="trend-desc" id="trend-desc">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-meta">
+          <div class="meta-row"><div class="meta-key">Peak Today</div><div class="meta-val" id="meta-peak">—</div></div>
+          <div class="meta-row"><div class="meta-key">Density</div><div class="meta-val" id="meta-density">—</div></div>
+          <div class="meta-row"><div class="meta-key">Avg Dwell Time</div><div class="meta-val" id="meta-dwell">—</div></div>
+          <div class="meta-row"><div class="meta-key">Active Cameras</div><div class="meta-val" id="meta-cameras">—</div></div>
+          <div class="meta-row"><div class="meta-key">Last Updated</div><div class="meta-val" id="meta-updated">—</div></div>
+        </div>
+      </div>
     </div>
-  </main>
+  </div>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-left">
       <div style="display:flex;align-items:center;gap:6px;"><div class="footer-dot" style="background:var(--accent2);"></div>System Online</div>
-      <span>Data refresh: 15s</span>
-      <span>Sensors: 52 active</span>
-      <span>AI Engine: v3.4.1</span>
+      <span>Data refresh: 15s</span><span>Sensors: 52 active</span><span>AI Engine: v3.4.1</span>
     </div>
     <div>CrowdSense Monitoring Platform · Venue Control Room</div>
   </footer>
 </div>
 
 <script>
-/* ═══════════════════ AUTH ═══════════════════ */
-const CREDS = { admin: 'crowd@2025' };
+/* ═══ CITY DATA ═══ */
+const cities = [
+  { id:'tokyo',     name:'Tokyo',      country:'Japan',          crowd:142800, capacity:200000, density:4.2, risk:'high',   trend:'up',   trendRate:'+2,400/hr', trendDesc:'Increasing — peak commute hours',          peak:'187,400', dwell:'1h 48m', cameras:'214/220', img:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80', ytId:'dR40FNNs5s0' },
+  { id:'newyork',   name:'New York',   country:'United States',  crowd:98500,  capacity:150000, density:3.8, risk:'medium', trend:'up',   trendRate:'+1,100/hr', trendDesc:'Gradually rising — afternoon surge',       peak:'124,200', dwell:'2h 05m', cameras:'310/320', img:'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&q=80', ytId:'AdUw5RdyZxI' },
+  { id:'london',    name:'London',     country:'United Kingdom', crowd:76400,  capacity:130000, density:2.9, risk:'low',    trend:'down', trendRate:'−800/hr',   trendDesc:'Decreasing — evening dispersal',           peak:'102,000', dwell:'2h 22m', cameras:'188/192', img:'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&q=80', ytId:'BQXK2OWzsXs' },
+  { id:'mumbai',    name:'Mumbai',     country:'India',          crowd:164200, capacity:180000, density:6.8, risk:'danger', trend:'up',   trendRate:'+3,600/hr', trendDesc:'Critical surge — immediate action required',peak:'164,200', dwell:'1h 30m', cameras:'98/110',  img:'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?w=600&q=80', ytId:'xYIo-I8Qwm0' },
+  { id:'paris',     name:'Paris',      country:'France',         crowd:54800,  capacity:100000, density:2.1, risk:'low',    trend:'flat', trendRate:'±0/hr',     trendDesc:'Stable — normal tourist flow',             peak:'81,000',  dwell:'3h 10m', cameras:'156/158', img:'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80', ytId:'N1fhMFQxFwU' },
+  { id:'dubai',     name:'Dubai',      country:'UAE',            crowd:87300,  capacity:120000, density:3.4, risk:'medium', trend:'up',   trendRate:'+1,800/hr', trendDesc:'Rising — mall and event activity',         peak:'104,500', dwell:'2h 45m', cameras:'132/135', img:'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80', ytId:'O0nHgDDU04U' },
+  { id:'shanghai',  name:'Shanghai',   country:'China',          crowd:198400, capacity:250000, density:5.9, risk:'high',   trend:'up',   trendRate:'+4,200/hr', trendDesc:'High volume — Bund area congested',        peak:'198,400', dwell:'1h 55m', cameras:'298/300', img:'https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=600&q=80', ytId:'bASuNXMfnEE' },
+  { id:'sydney',    name:'Sydney',     country:'Australia',      crowd:42100,  capacity:90000,  density:1.6, risk:'low',    trend:'down', trendRate:'−600/hr',   trendDesc:'Declining — post-event dispersal',         peak:'74,800',  dwell:'2h 38m', cameras:'88/90',   img:'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600&q=80', ytId:'JKfFijuFLhQ' },
+  { id:'delhi',     name:'New Delhi',  country:'India',          crowd:138600, capacity:160000, density:5.4, risk:'high',   trend:'up',   trendRate:'+2,900/hr', trendDesc:'Increasing — market day peak',             peak:'148,000', dwell:'1h 42m', cameras:'178/185', img:'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80', ytId:'kLyC5OgvIY4' },
+  { id:'singapore', name:'Singapore',  country:'Singapore',      crowd:63200,  capacity:110000, density:2.6, risk:'medium', trend:'up',   trendRate:'+900/hr',   trendDesc:'Slowly rising — lunch hour',               peak:'82,400',  dwell:'2h 15m', cameras:'142/145', img:'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600&q=80', ytId:'UiM8MXpHMDY' },
+  { id:'istanbul',  name:'Istanbul',   country:'Turkey',         crowd:91400,  capacity:130000, density:4.1, risk:'medium', trend:'up',   trendRate:'+1,500/hr', trendDesc:'Moderate rise — bazaar district',          peak:'115,000', dwell:'2h 00m', cameras:'162/168', img:'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600&q=80', ytId:'zNMUFmWJeS0' },
+  { id:'cairo',     name:'Cairo',      country:'Egypt',          crowd:112700, capacity:140000, density:5.1, risk:'high',   trend:'flat', trendRate:'+200/hr',   trendDesc:'Nearly stable — dense but contained',      peak:'118,300', dwell:'1h 55m', cameras:'104/112', img:'https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?w=600&q=80', ytId:'wdajNEJVPSs' },
+];
 
+const riskConfig = {
+  low:    { tileCls:'risk-low',    label:'LOW',    capColor:'var(--accent2)', badgeCls:'risk-low'    },
+  medium: { tileCls:'risk-medium', label:'MEDIUM', capColor:'var(--warn)',    badgeCls:'risk-medium' },
+  high:   { tileCls:'risk-high',   label:'HIGH',   capColor:'var(--accent3)', badgeCls:'risk-high'   },
+  danger: { tileCls:'risk-danger', label:'DANGER', capColor:'var(--danger)',  badgeCls:'risk-danger' },
+};
+
+/* ═══ AUTH ═══ */
+const CREDS = { admin: 'crowd@2025' };
 function doLogin() {
   const u = document.getElementById('username').value.trim();
   const p = document.getElementById('password').value;
@@ -583,12 +593,11 @@ function doLogout() {
   document.getElementById('username').value = '';
   document.getElementById('password').value = '';
   document.getElementById('login-error').style.display = 'none';
+  closeStream();
 }
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.getElementById('login-page').style.display !== 'none') doLogin();
 });
-
-/* zone buttons */
 document.querySelectorAll('.zone-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.zone-btn').forEach(b => b.classList.remove('active'));
@@ -596,33 +605,150 @@ document.querySelectorAll('.zone-btn').forEach(btn => {
   });
 });
 
-/* ═══════════════════ CLOCK ═══════════════════ */
+/* ═══ CLOCK ═══ */
 function updateClock() {
-  const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB', { hour12: false });
 }
 setInterval(updateClock, 1000); updateClock();
 
-/* ═══════════════════ DATA ═══════════════════ */
+/* ═══ TAB SWITCH ═══ */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.h-nav a').forEach(a => a.classList.remove('active'));
+  if (tab === 'overview') {
+    document.getElementById('panel-overview').classList.add('active');
+    document.getElementById('tab-overview').classList.add('active');
+  } else {
+    document.getElementById('panel-live').classList.add('active');
+    document.getElementById('tab-live').classList.add('active');
+    renderCityGrid();
+  }
+}
+
+/* ═══ CITY GRID ═══ */
+let gridRendered = false;
+function renderCityGrid() {
+  if (gridRendered) return;
+  gridRendered = true;
+  document.getElementById('city-count').textContent = cities.length;
+  const grid = document.getElementById('city-grid');
+  grid.innerHTML = cities.map(city => {
+    const rc = riskConfig[city.risk];
+    const capPct = Math.round(city.crowd / city.capacity * 100);
+    const crowdFmt = city.crowd.toLocaleString();
+    const trendIcon = city.trend === 'up' ? '↑' : city.trend === 'down' ? '↓' : '→';
+    const chipCls = city.trend === 'up' ? 'danger' : city.trend === 'down' ? 'green' : '';
+    const capCls = capPct > 85 ? 'danger' : capPct > 65 ? 'warn' : 'green';
+    return `
+      <div class="city-tile" onclick="openStream('${city.id}')">
+        <div class="city-tile-bg" style="background-image:url('${city.img}')"></div>
+        <div class="city-tile-grad"></div>
+        <div class="city-tile-live"><div class="live-dot"></div>LIVE</div>
+        <div class="city-tile-risk ${rc.tileCls}">${rc.label}</div>
+        <div class="city-tile-always">
+          <div class="city-tile-name">${city.name}</div>
+          <div class="city-tile-country">${city.country}</div>
+        </div>
+        <div class="city-tile-details">
+          <div class="city-detail-chip">
+            <div class="chip-label">Crowd</div>
+            <div class="chip-val">${crowdFmt}</div>
+          </div>
+          <div class="city-detail-chip">
+            <div class="chip-label">Cap %</div>
+            <div class="chip-val ${capCls}">${capPct}%</div>
+          </div>
+          <div class="city-detail-chip">
+            <div class="chip-label">Trend</div>
+            <div class="chip-val ${chipCls}">${trendIcon} ${city.trend.toUpperCase()}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/* ═══ STREAM ═══ */
+function openStream(cityId) {
+  const city = cities.find(c => c.id === cityId);
+  if (!city) return;
+  const rc = riskConfig[city.risk];
+  const capPct = Math.round(city.crowd / city.capacity * 100);
+
+  document.getElementById('city-grid-view').style.display = 'none';
+  document.getElementById('stream-view').classList.add('visible');
+
+  document.getElementById('stream-city-label').innerHTML =
+    `<span>LIVE ·</span> ${city.name.toUpperCase()}`;
+
+  document.getElementById('panel-name').textContent = city.name;
+  document.getElementById('panel-country').textContent = city.country;
+
+  const badge = document.getElementById('panel-risk-badge');
+  badge.textContent = rc.label + ' RISK';
+  badge.className = 'panel-risk-badge ' + rc.badgeCls;
+
+  document.getElementById('panel-crowd').innerHTML =
+    city.crowd.toLocaleString() + '<span class="panel-stat-unit">people</span>';
+  document.getElementById('panel-crowd-sub').textContent =
+    'Out of ' + city.capacity.toLocaleString() + ' capacity';
+
+  document.getElementById('panel-cap-pct').textContent = capPct + '%';
+  const fill = document.getElementById('panel-cap-fill');
+  fill.style.width = capPct + '%';
+  fill.style.background = rc.capColor;
+
+  const arrow = document.getElementById('trend-arrow');
+  const rate = document.getElementById('trend-rate');
+  if (city.trend === 'up')        { arrow.textContent = '↑'; arrow.className = 'trend-arrow up';   rate.className = 'trend-rate up'; }
+  else if (city.trend === 'down') { arrow.textContent = '↓'; arrow.className = 'trend-arrow down'; rate.className = 'trend-rate down'; }
+  else                            { arrow.textContent = '→'; arrow.className = 'trend-arrow flat'; rate.className = 'trend-rate'; }
+  rate.textContent = city.trendRate;
+  document.getElementById('trend-desc').textContent = city.trendDesc;
+
+  document.getElementById('meta-peak').textContent = city.peak;
+  document.getElementById('meta-density').textContent = city.density + ' p/m²';
+  document.getElementById('meta-dwell').textContent = city.dwell;
+  document.getElementById('meta-cameras').textContent = city.cameras;
+  document.getElementById('meta-updated').textContent = new Date().toLocaleTimeString('en-GB', { hour12: false });
+
+  // Load YouTube embed
+  const embedDiv = document.getElementById('stream-embed');
+  const old = embedDiv.querySelector('iframe');
+  if (old) old.remove();
+  const iframe = document.createElement('iframe');
+  iframe.src = `https://www.youtube.com/embed/${city.ytId}?autoplay=1&mute=1&controls=1`;
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframe.allowFullscreen = true;
+  embedDiv.appendChild(iframe);
+  document.getElementById('stream-placeholder').style.display = 'none';
+}
+
+function closeStream() {
+  document.getElementById('stream-view').classList.remove('visible');
+  document.getElementById('city-grid-view').style.display = '';
+  const embedDiv = document.getElementById('stream-embed');
+  const old = embedDiv.querySelector('iframe');
+  if (old) old.remove();
+  document.getElementById('stream-placeholder').style.display = 'flex';
+}
+
+/* ═══ OVERVIEW CHARTS ═══ */
 const hours = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
 const entryData = [820,1450,2100,3200,4500,5300,6100,5800,4900,4200,3600,2800,1900,950];
 const exitData  = [120,210,400,650,900,1200,1600,2100,2500,2800,2900,2600,2100,1400];
-const crowdFlow = entryData.map((v,i)=> {
-  let c=0; for(let j=0;j<=i;j++) c+=entryData[j]-exitData[j]; return Math.max(0,c);
-});
+const crowdFlow = entryData.map((v,i)=>{ let c=0; for(let j=0;j<=i;j++) c+=entryData[j]-exitData[j]; return Math.max(0,c); });
 
 const zones = [
-  { name:'Main Stage',  count:8200, cap:10000, density:5.8, status:'warn' },
-  { name:'Gate A',      count:1400, cap:3000,  density:1.2, status:'ok'   },
-  { name:'Gate B',      count:1900, cap:3000,  density:1.7, status:'ok'   },
-  { name:'Gate C',      count:2800, cap:3000,  density:6.4, status:'crit' },
-  { name:'Food Court',  count:3100, cap:4000,  density:3.9, status:'warn' },
-  { name:'VIP Area',    count:1200, cap:2000,  density:2.1, status:'ok'   },
-  { name:'Zone 7',      count:2600, cap:2800,  density:6.9, status:'crit' },
-  { name:'Parking P3',  count:2900, cap:3000,  density:4.8, status:'crit' },
-  { name:'East Wing',   count:780,  cap:2000,  density:0.9, status:'ok'   },
+  { name:'Main Stage', count:8200, cap:10000, density:5.8, status:'warn' },
+  { name:'Gate A',     count:1400, cap:3000,  density:1.2, status:'ok'   },
+  { name:'Gate B',     count:1900, cap:3000,  density:1.7, status:'ok'   },
+  { name:'Gate C',     count:2800, cap:3000,  density:6.4, status:'crit' },
+  { name:'Food Court', count:3100, cap:4000,  density:3.9, status:'warn' },
+  { name:'VIP Area',   count:1200, cap:2000,  density:2.1, status:'ok'   },
+  { name:'Zone 7',     count:2600, cap:2800,  density:6.9, status:'crit' },
+  { name:'Parking P3', count:2900, cap:3000,  density:4.8, status:'crit' },
+  { name:'East Wing',  count:780,  cap:2000,  density:0.9, status:'ok'   },
 ];
-
 const incidents = [
   { type:'crit', title:'Crowd surge detected — Gate C', meta:'Zone: Gate C · Cam 14', time:'15:42', icon:'danger' },
   { type:'crit', title:'Bottleneck — Zone 7 east exit', meta:'Zone: Zone 7 · Cam 27', time:'15:38', icon:'danger' },
@@ -631,200 +757,59 @@ const incidents = [
   { type:'info', title:'Staff deployed — Gate C',      meta:'Response: 8 personnel', time:'14:50', icon:'info' },
   { type:'info', title:'Flow normalized — Gate A',     meta:'Zone: Gate A · Cam 02', time:'14:32', icon:'info' },
 ];
-
 const heatData = [
-  [0.1,0.2,0.3,0.6,0.7,0.4,0.2,0.1],
-  [0.2,0.4,0.6,0.9,0.95,0.7,0.4,0.2],
-  [0.3,0.5,0.7,0.85,0.9,0.85,0.6,0.3],
-  [0.2,0.4,0.65,0.8,0.75,0.65,0.5,0.2],
+  [0.1,0.2,0.3,0.6,0.7,0.4,0.2,0.1],[0.2,0.4,0.6,0.9,0.95,0.7,0.4,0.2],
+  [0.3,0.5,0.7,0.85,0.9,0.85,0.6,0.3],[0.2,0.4,0.65,0.8,0.75,0.65,0.5,0.2],
   [0.1,0.2,0.4,0.5,0.5,0.4,0.3,0.1],
 ];
 
-/* ═══════════════════ INIT DASHBOARD ═══════════════════ */
 function initDashboard() {
-  renderZoneTable();
-  renderIncidents();
-  renderHeatmap();
-  renderFlowChart();
-  renderDensityChart();
-  renderIncidentPie();
-  renderEntryExitChart();
+  renderZoneTable(); renderIncidents(); renderHeatmap();
+  renderFlowChart(); renderDensityChart(); renderIncidentPie(); renderEntryExitChart();
 }
-
-/* ── Zone Table ── */
 function renderZoneTable() {
   const body = document.getElementById('zone-table-body');
   body.innerHTML = zones.map(z => {
-    const pct = Math.round(z.count / z.cap * 100);
-    const colors = { ok:'#00ff9d', warn:'#ffcc00', crit:'#ff3b5c' };
-    const col = colors[z.status];
-    const pills = { ok:'pill-ok', warn:'pill-warn', crit:'pill-crit' };
-    const labels = { ok:'Normal', warn:'Warning', crit:'Critical' };
-    return `<tr>
-      <td class="td-zone">${z.name}</td>
-      <td>${z.count.toLocaleString()}</td>
-      <td style="font-family:'Share Tech Mono',monospace;color:${col}">${pct}%</td>
-      <td>
-        <div class="density-bar">
-          <div class="density-fill" style="width:${Math.min(z.density/8*100,100)}%;background:${col};"></div>
-        </div>
-        <div style="font-size:10px;color:var(--text2);margin-top:2px;">${z.density} p/m²</div>
-      </td>
-      <td><span class="status-pill ${pills[z.status]}">${labels[z.status]}</span></td>
-    </tr>`;
+    const pct = Math.round(z.count/z.cap*100);
+    const colors={ok:'#00ff9d',warn:'#ffcc00',crit:'#ff3b5c'};
+    const col=colors[z.status];
+    const pills={ok:'pill-ok',warn:'pill-warn',crit:'pill-crit'};
+    const labels={ok:'Normal',warn:'Warning',crit:'Critical'};
+    return `<tr><td class="td-zone">${z.name}</td><td>${z.count.toLocaleString()}</td><td style="font-family:'Share Tech Mono',monospace;color:${col}">${pct}%</td><td><div class="density-bar"><div class="density-fill" style="width:${Math.min(z.density/8*100,100)}%;background:${col};"></div></div><div style="font-size:10px;color:var(--text2);margin-top:2px;">${z.density} p/m²</div></td><td><span class="status-pill ${pills[z.status]}">${labels[z.status]}</span></td></tr>`;
   }).join('');
 }
-
-/* ── Incidents ── */
 function renderIncidents() {
-  const svgDanger = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
-  const svgWarn   = `<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>`;
-  const svgInfo   = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`;
-  const icons = { danger: svgDanger, warn: svgWarn, info: svgInfo };
-  document.getElementById('incident-log').innerHTML = incidents.map(inc => `
-    <div class="incident">
-      <div class="inc-icon ${inc.type}">${icons[inc.icon]}</div>
-      <div class="inc-body">
-        <div class="inc-title">${inc.title}</div>
-        <div class="inc-meta">${inc.meta}</div>
-      </div>
-      <div class="inc-time">Today ${inc.time}</div>
-    </div>
-  `).join('');
+  const sd=`<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
+  const sw=`<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>`;
+  const si=`<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`;
+  const icons={danger:sd,warn:sw,info:si};
+  document.getElementById('incident-log').innerHTML = incidents.map(i=>`<div class="incident"><div class="inc-icon ${i.type}">${icons[i.icon]}</div><div class="inc-body"><div class="inc-title">${i.title}</div><div class="inc-meta">${i.meta}</div></div><div class="inc-time">Today ${i.time}</div></div>`).join('');
 }
-
-/* ── Heatmap ── */
 function renderHeatmap() {
-  const grid = document.getElementById('heatmap');
-  grid.innerHTML = '';
-  heatData.forEach((row, ri) => {
-    row.forEach((val, ci) => {
-      const cell = document.createElement('div');
-      cell.className = 'hm-cell';
-      const r = Math.round(val < 0.5 ? val*2*13 : 13 + (val-0.5)*2*242);
-      const g = Math.round(val < 0.5 ? 13+val*2*242 : 255 - (val-0.5)*2*242);
-      const b = Math.round(val < 0.3 ? 154 - val*(154/0.3) : 0);
-      cell.style.background = `rgba(${r},${g},${b},0.85)`;
-      cell.setAttribute('data-tip', `Row ${ri+1}-Col ${ci+1}: ${Math.round(val*100)}% density`);
-      grid.appendChild(cell);
-    });
-  });
+  const grid = document.getElementById('heatmap'); grid.innerHTML='';
+  heatData.forEach((row,ri) => row.forEach((val,ci) => {
+    const cell=document.createElement('div'); cell.className='hm-cell';
+    const r=Math.round(val<0.5?val*2*13:13+(val-0.5)*2*242);
+    const g=Math.round(val<0.5?13+val*2*242:255-(val-0.5)*2*242);
+    const b=Math.round(val<0.3?154-val*(154/0.3):0);
+    cell.style.background=`rgba(${r},${g},${b},0.85)`;
+    cell.setAttribute('data-tip',`Row ${ri+1}-Col ${ci+1}: ${Math.round(val*100)}% density`);
+    grid.appendChild(cell);
+  }));
 }
-
-/* ═══════════════════ CHARTS ═══════════════════ */
-const chartDefaults = () => ({
-  color: '#6a8fa5',
-  plugins: { legend: { display: false }, tooltip: {
-    backgroundColor: '#0f1a22', borderColor: '#254055', borderWidth: 1,
-    titleColor: '#c8dde8', bodyColor: '#6a8fa5',
-    titleFont: { family: "'Share Tech Mono'" }, bodyFont: { family: "'Barlow'" }
-  }},
-  scales: {
-    x: { grid: { color: 'rgba(30,48,64,0.8)' }, ticks: { color: '#3a6070', font: { size: 10, family: "'Barlow Condensed'" } } },
-    y: { grid: { color: 'rgba(30,48,64,0.8)' }, ticks: { color: '#3a6070', font: { size: 10, family: "'Barlow Condensed'" } } }
-  }
-});
-
-/* Crowd Flow */
-function renderFlowChart() {
-  new Chart(document.getElementById('flowChart'), {
-    type: 'line',
-    data: {
-      labels: hours,
-      datasets: [{
-        label: 'Total Crowd',
-        data: crowdFlow,
-        borderColor: '#00d4ff', borderWidth: 2,
-        pointBackgroundColor: '#00d4ff', pointRadius: 3,
-        fill: true,
-        backgroundColor: (ctx) => {
-          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
-          g.addColorStop(0, 'rgba(0,212,255,0.25)');
-          g.addColorStop(1, 'rgba(0,212,255,0.01)');
-          return g;
-        },
-        tension: 0.4
-      }]
-    },
-    options: {
-      ...chartDefaults(),
-      plugins: {
-        ...chartDefaults().plugins,
-        annotation: {},
-      }
-    }
-  });
+const CD=()=>({color:'#6a8fa5',plugins:{legend:{display:false},tooltip:{backgroundColor:'#0f1a22',borderColor:'#254055',borderWidth:1,titleColor:'#c8dde8',bodyColor:'#6a8fa5',titleFont:{family:"'Share Tech Mono'"},bodyFont:{family:"'Barlow'"}}},scales:{x:{grid:{color:'rgba(30,48,64,0.8)'},ticks:{color:'#3a6070',font:{size:10,family:"'Barlow Condensed'"}}},y:{grid:{color:'rgba(30,48,64,0.8)'},ticks:{color:'#3a6070',font:{size:10,family:"'Barlow Condensed'"}}}}});
+function renderFlowChart(){
+  new Chart(document.getElementById('flowChart'),{type:'line',data:{labels:hours,datasets:[{label:'Total Crowd',data:crowdFlow,borderColor:'#00d4ff',borderWidth:2,pointBackgroundColor:'#00d4ff',pointRadius:3,fill:true,backgroundColor:(ctx)=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,300);g.addColorStop(0,'rgba(0,212,255,0.25)');g.addColorStop(1,'rgba(0,212,255,0.01)');return g;},tension:0.4}]},options:{...CD(),plugins:{...CD().plugins}}});
 }
-
-/* Zone Density bar */
-function renderDensityChart() {
-  const colors = zones.map(z => z.status === 'crit' ? '#ff3b5c' : z.status === 'warn' ? '#ffcc00' : '#00ff9d');
-  new Chart(document.getElementById('densityChart'), {
-    type: 'bar',
-    data: {
-      labels: zones.map(z => z.name.length > 10 ? z.name.slice(0,9)+'…' : z.name),
-      datasets: [{ data: zones.map(z=>z.density), backgroundColor: colors, borderWidth: 0, borderRadius: 2 }]
-    },
-    options: {
-      ...chartDefaults(),
-      indexAxis: 'y',
-      plugins: { ...chartDefaults().plugins },
-      scales: {
-        x: { ...chartDefaults().scales.x, max: 8, grid: { color: 'rgba(30,48,64,0.6)' }, ticks: { color:'#3a6070', font:{size:9,family:"'Barlow Condensed'"} } },
-        y: { ...chartDefaults().scales.y, grid: { display: false }, ticks: { color:'#c8dde8', font:{size:10,family:"'Barlow Condensed'"} } }
-      }
-    }
-  });
+function renderDensityChart(){
+  const colors=zones.map(z=>z.status==='crit'?'#ff3b5c':z.status==='warn'?'#ffcc00':'#00ff9d');
+  new Chart(document.getElementById('densityChart'),{type:'bar',data:{labels:zones.map(z=>z.name.length>10?z.name.slice(0,9)+'…':z.name),datasets:[{data:zones.map(z=>z.density),backgroundColor:colors,borderWidth:0,borderRadius:2}]},options:{...CD(),indexAxis:'y',plugins:{...CD().plugins},scales:{x:{...CD().scales.x,max:8,grid:{color:'rgba(30,48,64,0.6)'},ticks:{color:'#3a6070',font:{size:9,family:"'Barlow Condensed'"}}},y:{...CD().scales.y,grid:{display:false},ticks:{color:'#c8dde8',font:{size:10,family:"'Barlow Condensed'"}}}}}});
 }
-
-/* Incident Pie */
-function renderIncidentPie() {
-  new Chart(document.getElementById('incidentPie'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Crowd Surge','Bottleneck','Queue Overflow','Camera Fault','Staff Alert','Other'],
-      datasets: [{
-        data: [4, 3, 2, 1, 1, 1],
-        backgroundColor: ['#ff3b5c','#ff6b35','#ffcc00','#00d4ff','#00ff9d','#3a6070'],
-        borderWidth: 0, hoverOffset: 6
-      }]
-    },
-    options: {
-      cutout: '65%',
-      plugins: {
-        legend: {
-          display: true, position: 'bottom',
-          labels: { color: '#6a8fa5', font: { size: 10, family: "'Barlow'" }, padding: 10, boxWidth: 10, boxHeight: 10 }
-        },
-        tooltip: chartDefaults().plugins.tooltip
-      }
-    }
-  });
+function renderIncidentPie(){
+  new Chart(document.getElementById('incidentPie'),{type:'doughnut',data:{labels:['Crowd Surge','Bottleneck','Queue Overflow','Camera Fault','Staff Alert','Other'],datasets:[{data:[4,3,2,1,1,1],backgroundColor:['#ff3b5c','#ff6b35','#ffcc00','#00d4ff','#00ff9d','#3a6070'],borderWidth:0,hoverOffset:6}]},options:{cutout:'65%',plugins:{legend:{display:true,position:'bottom',labels:{color:'#6a8fa5',font:{size:10,family:"'Barlow'"},padding:10,boxWidth:10,boxHeight:10}},tooltip:CD().plugins.tooltip}}});
 }
-
-/* Entry vs Exit hourly bar */
-function renderEntryExitChart() {
-  new Chart(document.getElementById('entryExitChart'), {
-    type: 'bar',
-    data: {
-      labels: hours,
-      datasets: [
-        { label:'Entry', data: entryData, backgroundColor:'rgba(0,212,255,0.7)', borderWidth:0, borderRadius:2 },
-        { label:'Exit',  data: exitData,  backgroundColor:'rgba(255,59,92,0.6)', borderWidth:0, borderRadius:2 }
-      ]
-    },
-    options: {
-      ...chartDefaults(),
-      plugins: {
-        ...chartDefaults().plugins,
-        legend: { display: true, position:'top', labels:{ color:'#6a8fa5', font:{size:9,family:"'Barlow'"}, padding:8, boxWidth:8, boxHeight:8 } }
-      },
-      scales: {
-        x: { stacked:false, grid:{display:false}, ticks:{color:'#3a6070', font:{size:8,family:"'Barlow Condensed'"},maxRotation:45} },
-        y: { grid:{color:'rgba(30,48,64,0.6)'}, ticks:{color:'#3a6070', font:{size:9,family:"'Barlow Condensed'"}} }
-      }
-    }
-  });
+function renderEntryExitChart(){
+  new Chart(document.getElementById('entryExitChart'),{type:'bar',data:{labels:hours,datasets:[{label:'Entry',data:entryData,backgroundColor:'rgba(0,212,255,0.7)',borderWidth:0,borderRadius:2},{label:'Exit',data:exitData,backgroundColor:'rgba(255,59,92,0.6)',borderWidth:0,borderRadius:2}]},options:{...CD(),plugins:{...CD().plugins,legend:{display:true,position:'top',labels:{color:'#6a8fa5',font:{size:9,family:"'Barlow'"},padding:8,boxWidth:8,boxHeight:8}}},scales:{x:{stacked:false,grid:{display:false},ticks:{color:'#3a6070',font:{size:8,family:"'Barlow Condensed'"},maxRotation:45}},y:{grid:{color:'rgba(30,48,64,0.6)'},ticks:{color:'#3a6070',font:{size:9,family:"'Barlow Condensed'"}}}}}}); 
 }
 </script>
 </body>
